@@ -1,0 +1,40 @@
+{% extends '@NightSurvey/layout/layout.html.twig' %}
+
+{% block body %}
+<div class="well">
+    <p>Staňte sa súčasťou projektu, ktorý mapuje správanie ľudí voči sebe v ťažkých situáciách.  Zlepšite sa v rozpoznávaní ľudských emócií a prispejte k vedeckým zisteniam v danej oblasti.</p>
+    <p>Zapojením do výskumu a uvedením svojho kontaktného e-mailu sa dostávate do žrebovania o elektronickú čítačku kníh a publikácie z oblasti emócií! Zároveň po odoslaní dotazníka obdržíte hodnotenie Vašej úspešnosti rozpoznať tvárové emócie na Váš e-mail.</p>
+
+    <p>Vyplnením nasledovného formuláru súhlasíte s poskytnutím svojich osobných údajov výlučne na výskumné účely. Z výskumu pre Vás nebudú plynúť žiadne dôsledky a môžete z neho kedykoľvek odstúpiť.</p>
+    <p>Výskum je súčasťou riešenia výskumného grantu VEGA 1/0578/15 2015-2018.</p>
+
+    <p>V prípade otázok nás neváhajte kontaktovať na e-mailovej adrese <a href="mailto:vyskum.emocii@gmail.com">vyskum.emocii@gmail.com</a></p>
+
+    <p>Ďakujeme za Váš čas! :)</p>
+
+    <p>
+        Bibiána Fejedelemová <br />
+        Simona Meštíková<br />
+        Jakub Mihalo<br />
+        Natália Ondrejková<br />
+        Mgr. Martina Baránková<br />
+        Mgr. Jana Koróniová<br />
+        Mgr. Bronislava Strnádelová<br />
+    </p>
+
+    <p><b>Konzultantka:</b><br />
+        Doc. Mgr. Júlia Halamová, PhD.</p>
+</div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="footer-nav">
+                <a href="{% if current_page > 1 %}{{ path('form', {"page":current_page-1}) }}{% else %}#{% endif %}" class="btn btn-default {% if current_page == 1 %}disabled{% endif %}">Spat</a>
+                <a href="{% if current_page < max_page %}{{ path('form', {"page":current_page+1}) }}{% else %}#{% endif %}" type="button" class="btn btn-default {% if current_page == max_page %}disabled{% endif %}">Dalej</a>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress }}" style="width: {{ progress }}%;"></div>
+                </div>
+                Stranka {{ current_page }} z {{ max_page }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
