@@ -9,21 +9,35 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/survey/{page}", requirements={"page": "\d+"}, name="form")
+     * @Route("/survey/{surveyId}/{page}", requirements={"page": "\d+"}, name="form")
      */
-    public function indexAction(Request $request, $page = 1)
+    public function indexAction(Request $request, $surveyId, $page = 1)
     {
         $session = $request->getSession();
         if(!$session->isStarted()) {
             $session->start();
         }
-        $maxPage = 8;
-        dump($session->getId());
-        dump($page);
+
+        $surveyService = $this->container->get("night_survey.survey");
+        $surveyDTO = $surveyService->getSurveyData($surveyId, $page);
+
+        $form = $surveyDTO->getForm();
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $sessionKey = $surveyDTO->getSurveyId() . "-" . $surveyDTO->getFormId();
+            $session->set($sessionKey, $data);
+            dump($session);
+            return $this->redirectToRoute('form', [
+                "surveyId" => $surveyDTO->getSurveyId(),
+                "page" => $surveyDTO->getCurrentPage() + 1
+            ]);
+        }
+
         return $this->render('NightSurveyBundle:Default:index.html.twig', [
-            'current_page' => $page,
-            'max_page'  => $maxPage,
-            'progress' => ceil(($page/$maxPage)*100)
+            'surveyDTO' => $surveyDTO
         ]);
     }
 }

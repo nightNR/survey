@@ -40,4 +40,77 @@ class Survey
      * @ORM\OneToMany(targetEntity="Form", mappedBy="survey")
      */
     private $forms;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->forms = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Survey
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Add forms
+     *
+     * @param \Night\SurveyBundle\Entity\Form $forms
+     * @return Survey
+     */
+    public function addForm(\Night\SurveyBundle\Entity\Form $forms)
+    {
+        $this->forms[] = $forms;
+
+        return $this;
+    }
+
+    /**
+     * Remove forms
+     *
+     * @param \Night\SurveyBundle\Entity\Form $forms
+     */
+    public function removeForm(\Night\SurveyBundle\Entity\Form $forms)
+    {
+        $this->forms->removeElement($forms);
+    }
+
+    /**
+     * Get forms
+     *
+     * @return \Doctrine\Common\Collections\Collection<Form>
+     */
+    public function getForms()
+    {
+        return $this->forms;
+    }
 }

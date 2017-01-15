@@ -105,6 +105,10 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/../vendor/jquery/jquery/jquery-1.11.1.js"
             output: js/jquery.js
+        application:
+            inputs:
+                - "%kernel.root_dir%/../src/Night/SurveyBundle/Resources/js/application.js"
+            output: js/application.js
 
 
 braincrafted_bootstrap:

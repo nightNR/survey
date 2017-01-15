@@ -2,3 +2,34 @@ services:
 #    night_survey.example:
 #        class: Night\SurveyBundle\Example
 #        arguments: ["@service_id", "plain_value", "%parameter%"]
+  night_survey.survey:
+      class: Night\SurveyBundle\Service\Survey
+      arguments: ["@doctrine.orm.default_entity_manager", "@form.factory", "@session"]
+
+  night_survey.input_type.text:
+      class: Night\SurveyBundle\Strategy\InputTypeStrategy\InputTextStrategy
+      arguments: ["@form.factory"]
+      tags:
+          - {name: "night_survey.input_type_strategy"}
+
+  night_survey.input_type.choice:
+        class: Night\SurveyBundle\Strategy\InputTypeStrategy\InputChoiceStrategy
+        arguments: ["@form.factory"]
+        tags:
+            - {name: "night_survey.input_type_strategy"}
+
+  night_survey.input_type.radio:
+          class: Night\SurveyBundle\Strategy\InputTypeStrategy\InputRadioStrategy
+          arguments: ["@form.factory"]
+          tags:
+              - {name: "night_survey.input_type_strategy"}
+  night_survey.input_type.integer:
+            class: Night\SurveyBundle\Strategy\InputTypeStrategy\InputIntegerStrategy
+            arguments: ["@form.factory"]
+            tags:
+                - {name: "night_survey.input_type_strategy"}
+  night_survey.input_type.email:
+              class: Night\SurveyBundle\Strategy\InputTypeStrategy\InputEmailStrategy
+              arguments: ["@form.factory"]
+              tags:
+                  - {name: "night_survey.input_type_strategy"}

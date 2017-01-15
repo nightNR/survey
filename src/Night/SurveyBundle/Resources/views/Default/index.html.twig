@@ -1,39 +1,42 @@
 {% extends '@NightSurvey/layout/layout.html.twig' %}
 
 {% block body %}
-<div class="well">
-    <p>Staňte sa súčasťou projektu, ktorý mapuje správanie ľudí voči sebe v ťažkých situáciách.  Zlepšite sa v rozpoznávaní ľudských emócií a prispejte k vedeckým zisteniam v danej oblasti.</p>
-    <p>Zapojením do výskumu a uvedením svojho kontaktného e-mailu sa dostávate do žrebovania o elektronickú čítačku kníh a publikácie z oblasti emócií! Zároveň po odoslaní dotazníka obdržíte hodnotenie Vašej úspešnosti rozpoznať tvárové emócie na Váš e-mail.</p>
-
-    <p>Vyplnením nasledovného formuláru súhlasíte s poskytnutím svojich osobných údajov výlučne na výskumné účely. Z výskumu pre Vás nebudú plynúť žiadne dôsledky a môžete z neho kedykoľvek odstúpiť.</p>
-    <p>Výskum je súčasťou riešenia výskumného grantu VEGA 1/0578/15 2015-2018.</p>
-
-    <p>V prípade otázok nás neváhajte kontaktovať na e-mailovej adrese <a href="mailto:vyskum.emocii@gmail.com">vyskum.emocii@gmail.com</a></p>
-
-    <p>Ďakujeme za Váš čas! :)</p>
-
-    <p>
-        Bibiána Fejedelemová <br />
-        Simona Meštíková<br />
-        Jakub Mihalo<br />
-        Natália Ondrejková<br />
-        Mgr. Martina Baránková<br />
-        Mgr. Jana Koróniová<br />
-        Mgr. Bronislava Strnádelová<br />
-    </p>
-
-    <p><b>Konzultantka:</b><br />
-        Doc. Mgr. Júlia Halamová, PhD.</p>
-</div>
+    <script type="application/javascript">
+        var SURVEY_ID = "{{ surveyDTO.surveyId }}";
+        var FORM_ID = "{{ surveyDTO.formId }}";
+    </script>
+    <div class="page-header"><h1>{{ surveyDTO.title }}</h1></div>
+    <div class="well">
+        {{ surveyDTO.formText | raw }}
+    </div>
+    <div class="panel panel-default">
+        {% if surveyDTO.subTitle is not empty %}
+            <div class="panel-heading">
+                <div class="panel-title">
+                    {{ surveyDTO.subTitle }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="panel-body">
+        {% if surveyDTO.form is not null %}
+            {{ form(surveyDTO.formView) }}
+            {#{{ dump(surveyDTO.form) }}#}
+        {% endif %}
+        </div>
+    </div>
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="footer-nav">
-                <a href="{% if current_page > 1 %}{{ path('form', {"page":current_page-1}) }}{% else %}#{% endif %}" class="btn btn-default {% if current_page == 1 %}disabled{% endif %}">Spat</a>
-                <a href="{% if current_page < max_page %}{{ path('form', {"page":current_page+1}) }}{% else %}#{% endif %}" type="button" class="btn btn-default {% if current_page == max_page %}disabled{% endif %}">Dalej</a>
+                <a href="{% if surveyDTO.currentPage > 1 %}{{ path('form', {"surveyId": surveyDTO.surveyId, "page":surveyDTO.currentPage-1}) }}{% else %}#{% endif %}"
+                   class="btn btn-default {% if surveyDTO.currentPage == 1 %}disabled{% endif %}">Spat</a>
+
+                <a href="{% if surveyDTO.currentPage < surveyDTO.maxPage %}{{ path('form', {"surveyId": surveyDTO.surveyId, "page":surveyDTO.currentPage+1}) }}{% else %}#{% endif %}"
+                   class="btn btn-default {% if surveyDTO.currentPage == surveyDTO.maxPage %}disabled{% endif %}" id="submit-next">Dalej</a>
                 <div class="progress">
-                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress }}" style="width: {{ progress }}%;"></div>
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                         aria-valuenow="{{ surveyDTO.progress }}" style="width: {{ surveyDTO.progress }}%;"></div>
                 </div>
-                Stranka {{ current_page }} z {{ max_page }}
+                Stranka {{ surveyDTO.currentPage }} z {{ surveyDTO.maxPage }}
             </div>
         </div>
     </div>

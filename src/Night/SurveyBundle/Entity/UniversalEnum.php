@@ -25,7 +25,7 @@ class UniversalEnum
     private $question;
 
     /**
-     * @var integer
+     * @var string
      * @ORM\Id()
      * @ORM\Column(name="id", type="guid")
      * @ORM\GeneratedValue(strategy="UUID")
@@ -43,4 +43,83 @@ class UniversalEnum
      * @ORM\Column(type="string", nullable=true)
      */
     private $label;
+
+    /**
+     * Get id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set value
+     *
+     * @param integer $value
+     * @return UniversalEnum
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return integer 
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return UniversalEnum
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string 
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * Set question
+     *
+     * @param \Night\SurveyBundle\Entity\Question $question
+     * @return UniversalEnum
+     */
+    public function setQuestion(\Night\SurveyBundle\Entity\Question $question = null)
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
+    /**
+     * Get question
+     *
+     * @return \Night\SurveyBundle\Entity\Question 
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
 }
