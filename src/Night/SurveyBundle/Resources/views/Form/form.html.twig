@@ -2,12 +2,22 @@
 
 {% block radio_range_widget %}
     {% spaceless %}
-        <div {{ block('widget_container_attributes') }}>
-            <label>{{ min_label }}</label>
-            {% for child in form %}
-                    {{ radio_row(child, { 'no_form_group': true, 'inline' : true, 'label_attr': label_attr, 'radio_range': true }) }}
-            {% endfor %}
-            <label>{{ max_label }}</label>
+        <div class="row">
+            <div class="col-md-8">
+                <div {{ block('widget_container_attributes') }} class="flex">
+                    <div class="col-md-2" style="justify-content: flex-end;">
+                        <span style="display: inline-block; vertical-align: middle;">{{ min_label }}</span>
+                    </div>
+                    <div class="col-md-8" style="justify-content: center;">
+                        {% for child in form %}
+                            {{ radio_row(child, { 'no_form_group': true, 'inline' : true, 'label_attr': label_attr, 'radio_range': true }) }}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-2" style="justify-content: flex-start;">
+                        <span style="display: inline-block; vertical-align: middle;">{{ max_label }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     {% endspaceless %}
 {% endblock radio_range_widget %}
@@ -38,7 +48,7 @@
             <div class="form-group{% if form.vars.errors|length > 0 %} has-error{% endif %}">
         {% endif %}
 
-        {%set radiodata %}
+        {% set radiodata %}
             {% if label is not same as (false) and radio_range is not defined or radio_range is not same as (true) %}
                 {% if not compound %}
                     {% set label_attr = label_attr|merge({'for': id}) %}
@@ -58,7 +68,8 @@
                 </label>
             {% elseif  radio_range is defined and radio_range is same as (true) %}
                 <div class="form-radio-range">
-                    <input type="radio" class="css-checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+                    <input type="radio"
+                           class="css-checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
                     <label for="{{ id }}" class="css-label">{{ value }}</label>
                 </div>
             {% else %}
@@ -69,7 +80,7 @@
 
         {% if inline is defined and inline %}
             {{ radiodata|raw }}
-        {% else%}
+        {% else %}
             <div class="radio">{{ radiodata|raw }}</div>
         {% endif %}
 

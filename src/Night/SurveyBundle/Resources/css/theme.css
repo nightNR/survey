@@ -52,3 +52,16 @@ label.css-label {
     -webkit-transition: all 0.25s linear;
     margin: 5px;
 }
+
+.flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+    flex-wrap: wrap;
+}
+.flex > [class*='col-'] {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
