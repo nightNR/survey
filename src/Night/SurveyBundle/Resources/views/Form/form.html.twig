@@ -1,0 +1,85 @@
+{% extends 'BraincraftedBootstrapBundle:Form:bootstrap.html.twig' %}
+
+{% block radio_range_widget %}
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }}>
+            <label>{{ min_label }}</label>
+            {% for child in form %}
+                    {{ radio_row(child, { 'no_form_group': true, 'inline' : true, 'label_attr': label_attr, 'radio_range': true }) }}
+            {% endfor %}
+            <label>{{ max_label }}</label>
+        </div>
+    {% endspaceless %}
+{% endblock radio_range_widget %}
+
+{% block radio_row %}
+    {% spaceless %}
+        {% set class = '' %}
+
+        {% set col_size = col_size|default(bootstrap_get_col_size()) %}
+
+        {% if attr.label_col is defined and attr.label_col is not empty %}
+            {% set label_col = attr.label_col %}
+        {% endif %}
+        {% if attr.widget_col is defined and attr.widget_col is not empty %}
+            {% set widget_col = attr.widget_col %}
+        {% endif %}
+        {% if attr.col_size is defined and attr.col_size is not empty %}
+            {% set col_size = attr.col_size %}
+        {% endif %}
+
+        {% if align_with_widget is defined or attr.align_with_widget is defined %}
+            {% set widget_col = widget_col|default(bootstrap_get_widget_col()) %}
+            {% set label_col = label_col|default(bootstrap_get_label_col()) %}
+            {% set class = ' col-'~ col_size ~ '-' ~ widget_col ~ ' col-' ~ col_size ~ '-offset-' ~ label_col %}
+            <div class="form-group {% if form.vars.errors|length > 0 %} has-error{% endif %}">
+            <div class="{{ class }}">
+        {% elseif no_form_group is not defined or no_form_group == false %}
+            <div class="form-group{% if form.vars.errors|length > 0 %} has-error{% endif %}">
+        {% endif %}
+
+        {%set radiodata %}
+            {% if label is not same as (false) and radio_range is not defined or radio_range is not same as (true) %}
+                {% if not compound %}
+                    {% set label_attr = label_attr|merge({'for': id}) %}
+                {% endif %}
+                {% if inline is defined and inline %}
+                    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' radio-inline')|trim}) %}
+                {% endif %}
+                {% if required %}
+                    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+                {% endif %}
+                {% if label is empty %}
+                    {% set label = name|humanize %}
+                {% endif %}
+                <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+                {{ block('radio_widget') }}
+                {{ label|trans({}, translation_domain)|raw -}}
+                </label>
+            {% elseif  radio_range is defined and radio_range is same as (true) %}
+                <div class="form-radio-range">
+                    <input type="radio" class="css-checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+                    <label for="{{ id }}" class="css-label">{{ value }}</label>
+                </div>
+            {% else %}
+                {{ block('radio_widget') }}
+            {% endif %}
+            {{ form_errors(form) }}
+        {% endset %}
+
+        {% if inline is defined and inline %}
+            {{ radiodata|raw }}
+        {% else%}
+            <div class="radio">{{ radiodata|raw }}</div>
+        {% endif %}
+
+        {{ block('form_help') }}
+
+        {% if align_with_widget is defined or attr.align_with_widget is defined %}
+            </div>
+            </div>
+        {% elseif no_form_group is not defined or no_form_group == false %}
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock radio_row %}

@@ -34,6 +34,9 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form:
+        resources:
+            - 'NightSurveyBundle:Form:form.html.twig'
 
 # Doctrine Configuration
 doctrine:
@@ -115,4 +118,4 @@ braincrafted_bootstrap:
     css_preprocessor: less
     fonts_dir: "%kernel.root_dir%/../web/fonts"
     auto_configure:
-        twig: true
+        twig: false

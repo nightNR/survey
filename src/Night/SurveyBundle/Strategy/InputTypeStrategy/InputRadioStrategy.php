@@ -54,7 +54,6 @@ class InputRadioStrategy implements InputTypeStrategyInterface
                 "label" => $question->getQuestionText(),
                 "required" => true,
                 "choices" => $optionsChoices,
-                "choices_as_values" => false,
                 "expanded" => true,
                 "multiple" => false,
                 "constraints" => $constraints

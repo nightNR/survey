@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: nightnr
- * Date: 15.01.17
- * Time: 21:23
+ * Date: 16.01.17
+ * Time: 18:51
  */
 
 namespace Night\SurveyBundle\Strategy\InputTypeStrategy;
@@ -11,12 +11,13 @@ namespace Night\SurveyBundle\Strategy\InputTypeStrategy;
 
 use Night\SurveyBundle\Entity\Question;
 use Night\SurveyBundle\Entity\UniversalEnum;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Night\SurveyBundle\Form\InputType\RangeInput;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class InputChoiceStrategy implements InputTypeStrategyInterface
+class InputRadioRangeStrategy implements InputTypeStrategyInterface
 {
+
     /** @var  FormFactoryInterface */
     protected $formFactory;
 
@@ -31,7 +32,7 @@ class InputChoiceStrategy implements InputTypeStrategyInterface
 
     public function getInputType()
     {
-        return "input_choice";
+        return "input_radio_range";
     }
 
     public function process(Question $question)
@@ -48,13 +49,13 @@ class InputChoiceStrategy implements InputTypeStrategyInterface
         }
         return $this->formFactory->createNamedBuilder(
             $question->getId(),
-            ChoiceType::class,
+            RangeInput::class,
             null,
             [
                 "label" => $question->getQuestionText(),
                 "required" => true,
                 "choices" => $optionsChoices,
-                "constraints" => $constraints
+                "constraints" => $constraints,
             ]
         );
     }

@@ -14,3 +14,41 @@ body {
     vertical-align: middle;
     margin: 0;
 }
+
+.form-radio-range {
+    display: inline-block;
+    min-width: 25px;
+    vertical-align: middle;
+}
+
+.form-radio-range > div {
+    margin: 0 auto;
+    text-align: center;
+}
+
+input[type=radio].css-checkbox {
+    position:absolute; z-index:-1000; left:-1000px; overflow: hidden; clip: rect(0 0 0 0); height:1px; width:1px; margin:-1px; padding:0; border:0;
+}
+
+input[type=radio].css-checkbox + label.css-label {
+    /*padding-left: 5px;*/
+    height: 28px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+    width: 28px;
+    border: 3px solid #e4b9c0;
+    border-radius: 100%;
+    line-height: 22px;
+}
+
+input[type=radio].css-checkbox:checked + label.css-label {
+    background-color: #66dd66;
+}
+label.css-label {
+    -webkit-transition: all 0.25s linear;
+    margin: 5px;
+}
