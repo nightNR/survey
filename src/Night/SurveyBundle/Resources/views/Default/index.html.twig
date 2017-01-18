@@ -20,7 +20,6 @@
         <div class="panel-body">
         {% if surveyDTO.form is not null %}
             {{ form(surveyDTO.formView) }}
-            {#{{ dump(surveyDTO.form) }}#}
         {% endif %}
         </div>
     </div>
@@ -31,7 +30,7 @@
                    class="btn btn-default {% if surveyDTO.currentPage == 1 %}disabled{% endif %}">Spat</a>
 
                 <a href="{% if surveyDTO.currentPage < surveyDTO.maxPage %}{{ path('form', {"surveyId": surveyDTO.surveyId, "page":surveyDTO.currentPage+1}) }}{% else %}#{% endif %}"
-                   class="btn btn-default {% if surveyDTO.currentPage == surveyDTO.maxPage %}disabled{% endif %}" id="submit-next">Dalej</a>
+                   class="btn {% if surveyDTO.currentPage == surveyDTO.maxPage %}btn-success {% else %} btn-default{% endif %}" id="submit-next">Dalej</a>
                 <div class="progress">
                     <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100"
                          aria-valuenow="{{ surveyDTO.progress }}" style="width: {{ surveyDTO.progress }}%;"></div>

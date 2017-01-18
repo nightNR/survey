@@ -46,7 +46,8 @@ class InputTextStrategy implements InputTypeStrategyInterface
             null,
             [
                 "label" => $question->getQuestionText(),
-                "constraints" => $constraints
+                "constraints" => $constraints,
+                "image" => $question->getImage()
             ]
         );
     }

@@ -6,6 +6,11 @@ services:
       class: Night\SurveyBundle\Service\Survey
       arguments: ["@doctrine.orm.default_entity_manager", "@form.factory", "@session"]
 
+  night_survey.image_type_extension:
+      class: Night\SurveyBundle\Form\TypeExtension\ImageTypeExtension
+      tags:
+        - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\TextType }
+
   night_survey.input_type.text:
       class: Night\SurveyBundle\Strategy\InputTypeStrategy\InputTextStrategy
       arguments: ["@form.factory"]

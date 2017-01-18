@@ -3,20 +3,22 @@
 {% block radio_range_widget %}
     {% spaceless %}
         <div class="row">
-            <div class="col-md-8">
-                <div {{ block('widget_container_attributes') }} class="flex">
-                    <div class="col-md-2" style="justify-content: flex-end;">
-                        <span style="display: inline-block; vertical-align: middle;">{{ min_label }}</span>
+            <div class="col-sm-12">
+                {#<div {{ block('widget_container_attributes') }} class="flex">#}
+                    <div class="row">
+                        <div class="col-sm-2" style="text-align: right">
+                            <span style="display: inline-block; vertical-align: middle;">{{ min_label }}</span>
+                        </div>
+                        <div class="col-sm-8" style="text-align: center;">
+                            {% for child in form %}
+                                {{ radio_row(child, { 'no_form_group': true, 'inline' : true, 'label_attr': label_attr, 'radio_range': true }) }}
+                            {% endfor %}
+                        </div>
+                        <div class="col-sm-2" style="text-align: left">
+                            <span style="display: inline-block; vertical-align: middle;">{{ max_label }}</span>
+                        </div>
                     </div>
-                    <div class="col-md-8" style="justify-content: center;">
-                        {% for child in form %}
-                            {{ radio_row(child, { 'no_form_group': true, 'inline' : true, 'label_attr': label_attr, 'radio_range': true }) }}
-                        {% endfor %}
-                    </div>
-                    <div class="col-md-2" style="justify-content: flex-start;">
-                        <span style="display: inline-block; vertical-align: middle;">{{ max_label }}</span>
-                    </div>
-                </div>
+                {#</div>#}
             </div>
         </div>
     {% endspaceless %}
@@ -94,3 +96,50 @@
         {% endif %}
     {% endspaceless %}
 {% endblock radio_row %}
+
+{% block form_widget_simple %}
+    {% spaceless %}
+        {% set style = style|default(bootstrap_get_style()) %}
+        {% set col_size = col_size|default(bootstrap_get_col_size()) %}
+
+        {% if simple_col is not defined and bootstrap_get_simple_col() %}
+            {% set simple_col = bootstrap_get_simple_col() %}
+        {% endif %}
+        {% if attr.simple_col is defined and attr.simple_col is not empty %}
+            {% set simple_col = attr.simple_col %}
+        {% endif %}
+        {% if attr.col_size is defined and attr.col_size is not empty %}
+            {% set col_size = attr.col_size %}
+        {% endif %}
+        {% if attr.style is defined and attr.style is not empty %}
+            {% set style = attr.style %}
+        {% endif %}
+
+        {% if simple_col is defined and simple_col %}
+            <div class="col-{{ col_size }}-{{ simple_col }}">
+        {% endif %}
+
+        {% set type = type|default('text') %}
+
+        {% if style == 'inline' and (attr.placeholder is not defined or attr.placeholder is empty)  and label is not same as (false) %}
+            {% if label is empty %}
+                {% set attr = attr|merge({ 'placeholder': name|humanize }) %}
+            {% else %}
+                {% set attr = attr|merge({ 'placeholder': label}) %}
+            {% endif %}
+        {% endif %}
+        {% if static_control is defined and static_control == true %}
+            {% set attr = attr|merge({ 'class': (attr.class|default('') ~ ' form-control-static')|trim }) %}
+            <p id="{{ id }}" {%- for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ value }}</p>
+        {%- else -%}
+            {% set attr = attr|merge({ 'class': (attr.class|default('') ~ ' form-control')|trim }) %}
+            <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}>
+        {%- endif %}
+        {% if image is defined and image is not empty %}
+            <img src="{{ image.path }}" class="img-responsive img-thumbnail" alt="{{ image.alt }}">
+        {% endif %}
+        {% if simple_col is defined %}
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_widget_simple %}

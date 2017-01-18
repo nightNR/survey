@@ -9,6 +9,7 @@
 namespace Night\SurveyBundle\Form\InputType;
 
 
+use Night\SurveyBundle\Form\Transformer\RangeInputChoiceTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\ArrayKeyChoiceList;
 use Symfony\Component\Form\ChoiceList\Factory\CachingFactoryDecorator;
@@ -141,7 +142,7 @@ class RangeInput extends AbstractType
             $event->setData($data);
         });
 
-        $builder->addViewTransformer(new ChoiceToValueTransformer($options['choice_list']));
+        $builder->addViewTransformer(new RangeInputChoiceTransformer($options['choice_list']));
     }
 
     /**
@@ -329,6 +330,7 @@ class RangeInput extends AbstractType
 
         $minLabelNormalizer = function (Options $options, $data) use ($that) {
             $choices = $options['choices'];
+            $label = "";
             $minKey = null;
             foreach($choices as $key => $choice) {
                 if($minKey === null || $minKey > $key) {
@@ -341,6 +343,7 @@ class RangeInput extends AbstractType
 
         $maxLabelNormalizer = function (Options $options, $data) use ($that) {
             $choices = $options['choices'];
+            $label = "";
             $maxKey = null;
             foreach($choices as $key => $choice) {
                 if($maxKey === null || $maxKey < $key) {

@@ -40,12 +40,20 @@ class Survey
      * @ORM\OneToMany(targetEntity="Form", mappedBy="survey")
      */
     private $forms;
+
+    /**
+     * @var ArrayCollection<SubmittedData>
+     * @ORM\OneToMany(targetEntity="Night\SurveyBundle\Entity\SubmittedData", mappedBy="survey")
+     */
+    private $submittedData;
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->forms = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->submittedData = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -113,4 +121,21 @@ class Survey
     {
         return $this->forms;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSubmittedData()
+    {
+        return $this->submittedData;
+    }
+
+    /**
+     * @param SubmittedData $submittedData
+     */
+    public function addSubmittedData($submittedData)
+    {
+        $this->submittedData[] = $submittedData;
+    }
+
 }

@@ -53,6 +53,7 @@ class Form
     /**
      * @var Question
      * @ORM\OneToMany(targetEntity="Night\SurveyBundle\Entity\Question", mappedBy="form")
+     * @ORM\OrderBy({"order": "ASC"})
      */
     private $questions;
     /**

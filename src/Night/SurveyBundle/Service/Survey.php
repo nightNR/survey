@@ -14,8 +14,10 @@ use Night\SurveyBundle\DTO\SurveyDTO;
 use Night\SurveyBundle\Entity\DataHolder;
 use Night\SurveyBundle\Entity\Form;
 use Night\SurveyBundle\Entity\Question;
+use Night\SurveyBundle\Entity\SubmittedData;
 use Night\SurveyBundle\Strategy\InputTypeStrategy\InputTypeStrategyInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Survey
@@ -80,13 +82,32 @@ class Survey
         return new SurveyDTO($surveyId, $currentForm->getId(), $survey->getTitle(), $currentForm->getTopic(), (int)$page, $survey->getForms()->count(), $currentForm->getTopText(), $formView!==null?$formView:null);
     }
 
+    public function save($surveyId)
+    {
+        $survey = $this->em->getRepository(\Night\SurveyBundle\Entity\Survey::class)->find($surveyId);
+
+        $dataHolder = new DataHolder();
+        foreach($survey->getForms() as $form) {
+            $sessionKey = $this->getSessionKeyFromForm($form);
+            $dataHolder->$sessionKey = $this->session->get($sessionKey);
+        }
+
+        $data = new SubmittedData();
+        $data->setId($this->session->getId());
+        $data->setSurvey($survey);
+        $data->setData($dataHolder);
+
+        $this->em->persist($data);
+        $this->em->flush();
+    }
+
     /**
      * @param Form $currentForm
      * @return \Symfony\Component\Form\FormInterface
      */
     private function generateForm(Form $currentForm)
     {
-        $sessionKey = $currentForm->getSurvey()->getId() . "-" . $currentForm->getId();
+        $sessionKey = $this->getSessionKeyFromForm($currentForm);
         $data = $this->session->get($sessionKey);
         if($data === null) {
             $data = new DataHolder();
@@ -110,4 +131,10 @@ class Survey
     {
         return $this->getInputTypeStrategy($question->getInputType())->process($question);
     }
+
+    private function getSessionKeyFromForm(Form $form)
+    {
+        return $form->getSurvey()->getId() . "-" . $form->getId();
+    }
+
 }

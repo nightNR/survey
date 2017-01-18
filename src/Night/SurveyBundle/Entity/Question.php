@@ -52,10 +52,23 @@ class Question
     private $inputEnums;
 
     /**
+     * @var Image
+     * @ORM\OneToOne(targetEntity="Night\SurveyBundle\Entity\Image", mappedBy="question")
+     */
+    private $image;
+
+    /**
      * @var boolean
      * @ORM\Column(type="boolean", nullable=false, options={"default":true})
      */
     private $isRequired;
+
+    /**
+     * @var int
+     * @ORM\Column(type="integer", nullable=false, options={"unsigned": true})
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $order;
 
     /**
      * Constructor
@@ -178,6 +191,23 @@ class Question
     }
 
     /**
+     * @return Image
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param $image
+     */
+    public function setImage(Image $image)
+    {
+        $this->image = $image;
+    }
+
+
+    /**
      * @return bool
      */
     public function isIsRequired()
@@ -191,5 +221,21 @@ class Question
     public function setIsRequired($isRequired)
     {
         $this->isRequired = $isRequired;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param int $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
     }
 }
