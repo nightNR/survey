@@ -148,6 +148,6 @@ class SurveyDTO
 
     public function getProgress()
     {
-        return floor(($this->currentPage/$this->maxPage))*100;
+        return floor(($this->currentPage/$this->maxPage)*100);
     }
 }
