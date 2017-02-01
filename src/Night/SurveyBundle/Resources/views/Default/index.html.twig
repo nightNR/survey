@@ -26,11 +26,11 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="footer-nav">
-                <a href="{% if surveyDTO.currentPage > 1 %}{{ path('form', {"surveyId": surveyDTO.surveyId, "page":surveyDTO.currentPage-1}) }}{% else %}#{% endif %}"
+                <a href="{% if surveyDTO.currentPage > 1 %}{{ path('form', {"surveyId": surveyDTO.surveyId, "direction": "back"}) }}{% else %}#{% endif %}"
                    class="btn btn-default {% if surveyDTO.currentPage == 1 %}disabled{% endif %}">Spat</a>
 
-                <a href="{% if surveyDTO.currentPage < surveyDTO.maxPage %}{{ path('form', {"surveyId": surveyDTO.surveyId, "page":surveyDTO.currentPage+1}) }}{% else %}#{% endif %}"
-                   class="btn {% if surveyDTO.currentPage == surveyDTO.maxPage %}btn-success {% else %} btn-default{% endif %}" id="submit-next">Dalej</a>
+                <a href="{% if surveyDTO.currentPage < surveyDTO.maxPage %}{{ path('form', {"surveyId": surveyDTO.surveyId}) }}{% else %}#{% endif %}"
+                   class="btn {% if surveyDTO.currentPage == surveyDTO.maxPage %}btn-success {% else %} btn-default{% endif %}" id="submit-next">{% if surveyDTO.currentPage == surveyDTO.maxPage %}Odoslať{% else %}Ďalej{% endif %}</a>
                 <div class="progress">
                     <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100"
                          aria-valuenow="{{ surveyDTO.progress }}" style="width: {{ surveyDTO.progress }}%;"></div>

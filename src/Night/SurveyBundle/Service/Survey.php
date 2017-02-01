@@ -15,6 +15,7 @@ use Night\SurveyBundle\Entity\DataHolder;
 use Night\SurveyBundle\Entity\Form;
 use Night\SurveyBundle\Entity\Question;
 use Night\SurveyBundle\Entity\SubmittedData;
+use Night\SurveyBundle\Entity\UniversalEnum;
 use Night\SurveyBundle\Strategy\InputTypeStrategy\InputTypeStrategyInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -30,11 +31,11 @@ class Survey
     /** @var  FormFactoryInterface */
     protected $formFactory;
 
-    /** @var InputTypeStrategyInterface[]  */
+    /** @var InputTypeStrategyInterface[] */
     protected $inputTypeStrategies = [];
 
     /** @var  SessionInterface */
-    protected  $session;
+    protected $session;
 
     /**
      * Survey constructor.
@@ -55,7 +56,7 @@ class Survey
 
     protected function getInputTypeStrategy($inputType)
     {
-        if(!isset($this->inputTypeStrategies[$inputType])) {
+        if (!isset($this->inputTypeStrategies[$inputType])) {
             throw new \InvalidArgumentException(sprintf("Invalid input type provided - %s", $inputType));
         }
         return $this->inputTypeStrategies[$inputType];
@@ -66,20 +67,20 @@ class Survey
         $survey = $this->em->find(\Night\SurveyBundle\Entity\Survey::class, $surveyId);
         $currentForm = null;
         /** @var Form $form */
-        foreach($survey->getForms() as $form){
-            if($form->getOrder() == $page) {
+        foreach ($survey->getForms() as $form) {
+            if ($form->getOrder() == $page) {
                 $currentForm = $form;
                 break;
             }
         }
 
-        if($currentForm === null) {
+        if ($currentForm === null) {
             throw new \InvalidArgumentException(sprintf("Survey page %s not exist.", $page));
         }
 
         $formView = $this->generateForm($currentForm);
 
-        return new SurveyDTO($surveyId, $currentForm->getId(), $survey->getTitle(), $currentForm->getTopic(), (int)$page, $survey->getForms()->count(), $currentForm->getTopText(), $formView!==null?$formView:null);
+        return new SurveyDTO($surveyId, $currentForm->getId(), $survey->getTitle(), $currentForm->getTopic(), (int)$page, $survey->getForms()->count(), $currentForm->getTopText(), $formView);
     }
 
     public function save($surveyId)
@@ -87,7 +88,7 @@ class Survey
         $survey = $this->em->getRepository(\Night\SurveyBundle\Entity\Survey::class)->find($surveyId);
 
         $dataHolder = new DataHolder();
-        foreach($survey->getForms() as $form) {
+        foreach ($survey->getForms() as $form) {
             $sessionKey = $this->getSessionKeyFromForm($form);
             $dataHolder->$sessionKey = $this->session->get($sessionKey);
         }
@@ -109,7 +110,7 @@ class Survey
     {
         $sessionKey = $this->getSessionKeyFromForm($currentForm);
         $data = $this->session->get($sessionKey);
-        if($data === null) {
+        if ($data === null) {
             $data = new DataHolder();
         }
 
@@ -137,4 +138,63 @@ class Survey
         return $form->getSurvey()->getId() . "-" . $form->getId();
     }
 
+    public function getScsScore($survey, $id)
+    {
+        $scsNegativeMatrix = [
+            'sj',
+            'i',
+            'oi',
+        ];
+        $result = $this->em->find(SubmittedData::class, [
+            'id' => $id,
+            'survey' => $survey
+        ]);
+        $scsForm = $this->getScsForm();
+        $totalScore = 0;
+        $groupResults = [];
+        $maxScore = 0;
+        /** @var Question $question */
+        foreach ($scsForm->getQuestions() as $question) {
+            if(empty($question->getGroup())) {
+                continue;
+            }
+            $resultValue = $result->getQuestionResult($scsForm, $question);
+            $totalScore += $resultValue;
+            $maxValue = $this->getQuestionMaxValue($question);
+            $maxScore+=$maxValue;
+            if(array_key_exists($question->getGroup(), $scsNegativeMatrix)) {
+                $resultValue = $maxValue + 1 - $resultValue;
+            }
+            $groupResults[$question->getGroup()][] = $resultValue;
+        }
+        foreach($groupResults as $key => $result) {
+            $groupResults[$key] = array_sum($result) / count($result);
+        }
+        return [
+            'hsx' => array_sum($groupResults),
+            'total_score' => $totalScore,
+            'max_score' => $maxScore,
+            'percent' => floor(($totalScore/$maxScore)*100)
+        ];
+    }
+
+    private function getScsForm()
+    {
+        return current($this->em->getRepository(Form::class)->findBy([
+            "id" => '9845353e-db4a-11e6-bf26-cec0c932ce03'
+        ]));
+    }
+
+    private function getQuestionMaxValue(Question $question)
+    {
+        $enums = $question->getInputEnums();
+        $maxValue = 0;
+        /** @var UniversalEnum $enum */
+        foreach($enums as $enum) {
+            if($maxValue < $enum->getValue()) {
+                $maxValue = $enum->getValue();
+            }
+        }
+        return $maxValue;
+    }
 }

@@ -103,6 +103,7 @@ assetic:
         theme_css:
             inputs:
                 - "%kernel.root_dir%/../src/Night/SurveyBundle/Resources/css/theme.css"
+                - "%kernel.root_dir%/../src/Night/SurveyBundle/Resources/css/circle.css"
             output: css/theme.css
         jquery:
             inputs:

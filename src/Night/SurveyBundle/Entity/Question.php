@@ -41,6 +41,12 @@ class Question
 
     /**
      * @var string
+     * @ORM\Column(name="group", type="string")
+     */
+    private $group;
+
+    /**
+     * @var string
      * @ORM\Column(name="input_type", type="string", nullable=false)
      */
     private $inputType;
@@ -109,6 +115,22 @@ class Question
     public function getQuestionText()
     {
         return $this->questionText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
+     * @param string $group
+     */
+    public function setGroup($group)
+    {
+        $this->group = $group;
     }
 
     /**

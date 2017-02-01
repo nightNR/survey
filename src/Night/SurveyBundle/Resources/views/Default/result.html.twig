@@ -1,0 +1,21 @@
+{% extends '@NightSurvey/layout/layout.html.twig' %}
+
+{% block body %}
+    <script type="application/javascript">
+        var SURVEY_ID = "{{ surveyDTO.surveyId }}";
+        var FORM_ID = "{{ surveyDTO.formId }}";
+    </script>
+    <div class="page-header"><h1>{{ surveyDTO.title }}</h1></div>
+    <div class="well">
+        {#<h1>{{ score.percent }}%</h1>#}
+        <div class="c100 p{{ score.percent }}">
+            <span>{{ score.percent }}%</span>
+            <div class="slice">
+                <div class="bar"></div>
+                <div class="fill"></div>
+            </div>
+        </div>
+
+        <p>Sebasúcit je schopnosť človeka pristupovať k svojim pocitom bolesti a utrpenia s porozumením a nehou. Človek s vysokou úrovňou sebasúcitu rozumie, že chyby sú súčasťou ľudskej podstaty a patria k životu. Prejav súcitu voči sebe, aj voči ostatným pomáha ľuďom prekonávať negatívne životné udalosti a zvyšuje odolnosť voči nim. Takisto sa súcitnosť spája s lepším mentálnym zdravím a nižšou úrovňou depresie a úzkosti. Je dôležité rozlíšiť sebasúcit a sebaľútosť, človek s nízkou úrovňou sebasúcitu sa prikláňa skôr k sebaľútosti a sebakritike. V prípade sebaľútosti majú jedinci tendenciu sa v nepríjemných situáciách izolovať od okolitého sveta a sú pohltení svojimi problémami. Vysoko sebakritickí ľudia majú problémy vyrovnať sa so svojimi zlyhaniami a zvyčajne im to trvá oveľa dlhšie.</p>
+    </div>
+{% endblock %}
