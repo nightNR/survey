@@ -145,6 +145,7 @@ class Survey
             'i',
             'oi',
         ];
+        /** @var SubmittedData $result */
         $result = $this->em->find(SubmittedData::class, [
             'id' => $id,
             'survey' => $survey
@@ -158,7 +159,7 @@ class Survey
             if(empty($question->getGroup())) {
                 continue;
             }
-            $resultValue = $result->getQuestionResult($scsForm, $question);
+            $resultValue = $result->getQuestionResult($question);
             $totalScore += $resultValue;
             $maxValue = $this->getQuestionMaxValue($question);
             $maxScore+=$maxValue;
@@ -176,6 +177,35 @@ class Survey
             'max_score' => $maxScore,
             'percent' => floor(($totalScore/$maxScore)*100)
         ];
+    }
+
+    /**
+     * @param $survey
+     * @return array
+     */
+    public function getResultAsCsv($survey)
+    {
+        /** @var SubmittedData[] $results */
+        $results = $this->em->getRepository(SubmittedData::class)->findBy([
+            'survey' => $survey
+        ]);
+
+        $output = [];
+        foreach($results as $result) {
+            $survey = $result->getSurvey();
+            /** @var Form[] $forms */
+            $forms = $survey->getForms();
+            foreach($forms as $form) {
+                /** @var Question $question */
+                foreach($form->getQuestions() as $question) {
+                    if(!array_key_exists($question->getId(), $output)) {
+                        $output['name'][$question->getId()] = $question->getQuestionText();
+                    }
+                    $output[$result->getId()][$question->getId()] = $this->getQuestionResult($result, $question);
+                }
+            }
+        }
+        return $output;
     }
 
     private function getScsForm()
@@ -196,5 +226,23 @@ class Survey
             }
         }
         return $maxValue;
+    }
+
+    private function getQuestionResult(SubmittedData $result, Question $question)
+    {
+        $resultData = $result->getQuestionResult($question);
+        switch($question->getInputType()) {
+            case "input_radio":
+            case "input_choice":
+                /** @var UniversalEnum $enum */
+                foreach($question->getInputEnums() as $enum) {
+                    if($enum->getValue() == $resultData) {
+                        $resultData = $enum->getLabel();
+                        break;
+                    }
+                }
+                break;
+        }
+        return $resultData;
     }
 }

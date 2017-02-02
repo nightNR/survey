@@ -6,6 +6,7 @@ use Night\SurveyBundle\Service\Survey;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DefaultController extends Controller
 {
@@ -85,5 +86,31 @@ class DefaultController extends Controller
                 'score' => $scsScore
             ]
             );
+    }
+
+    /**
+     * @param $surveyId
+     * @Route("export/{surveyId}", name="export", )
+     * @return StreamedResponse
+     */
+    public function exportAction($surveyId)
+    {
+        /** @var Survey $surveyService */
+        $surveyService = $this->container->get("night_survey.survey");
+        $output = $surveyService->getResultAsCsv($surveyId);
+
+        $response = new StreamedResponse();
+        $response->setCallback(function() use ($output) {
+            $handle = fopen('php://output', 'w+');
+
+            foreach($output as $row) {
+                fputcsv($handle, $row,';');
+            }
+            fclose($handle);
+        });
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename="export.csv"');
+        return $response;
     }
 }

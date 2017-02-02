@@ -87,10 +87,10 @@ class SubmittedData
         $this->data = $data;
     }
 
-    public function getQuestionResult(Form $form, Question $question)
+    public function getQuestionResult(Question $question)
     {
         /** @var DataHolder $formDataHolder */
-        $formDataHolder = $this->data[$this->getFormId($form)];
+        $formDataHolder = $this->data[$this->getFormId($question->getForm())];
         return $formDataHolder[$question->getId()];
     }
 
