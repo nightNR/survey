@@ -122,6 +122,7 @@ class Survey
             $sessionKey = $this->getSessionKeyFromForm($form);
             $this->session->remove($sessionKey);
         }
+        $this->session->clear();
     }
 
     /**
