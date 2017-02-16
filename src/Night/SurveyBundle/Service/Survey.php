@@ -52,11 +52,13 @@ class Survey
      * @param EntityManagerInterface $em
      * @param FormFactoryInterface $formFactory
      */
-    public function __construct(EntityManagerInterface $em, FormFactoryInterface $formFactory, SessionInterface $session)
+    public function __construct(EntityManagerInterface $em, FormFactoryInterface $formFactory, SessionInterface $session, \Swift_Mailer $mailer, \Twig_Environment $twig)
     {
         $this->em = $em;
         $this->formFactory = $formFactory;
         $this->session = $session;
+        $this->mailer = $mailer;
+        $this->twig = $twig;
     }
 
     public function addInputTypeStrategy(InputTypeStrategyInterface $inputTypeStrategy)
