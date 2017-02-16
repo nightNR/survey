@@ -1273,9 +1273,9 @@
             </div>
             <div class="content">
                 <div class="well">
-                    {#<a href="{{ absolute_url(path('result', {surveyId: surveyId, id: id})) }}">#}
-                        {#<div class="c100 p{{ score.percent }}">#}
-                            {#<span>{{ score.percent }}%</span>#}
+                    <a href="{{ absolute_url(path('result', {surveyId: surveyId, id: id})) }}">
+                        <div class="c100 p{{ score.percent }}">
+                            <span>{{ score.percent }}%</span>
                             <div class="slice">
                                 <div class="bar"></div>
                                 <div class="fill"></div>
