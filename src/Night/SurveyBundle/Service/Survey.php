@@ -118,10 +118,10 @@ class Survey
         if (!empty($email)) {
             $this->sendEmail($survey, $email);
         }
-//        foreach ($survey->getForms() as $form) {
-//            $sessionKey = $this->getSessionKeyFromForm($form);
-//            $this->session->remove($sessionKey);
-//        }
+        foreach ($survey->getForms() as $form) {
+            $sessionKey = $this->getSessionKeyFromForm($form);
+            $this->session->remove($sessionKey);
+        }
     }
 
     /**
