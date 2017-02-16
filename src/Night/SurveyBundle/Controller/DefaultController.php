@@ -120,30 +120,30 @@ class DefaultController extends Controller
     /**
      * @Route("email/{surveyId}/{id}", name="email")
      */
-//    public function emailAction(Request $request, $surveyId, $id)
-//    {
-//        $em = $this->container->get('doctrine.orm.default_entity_manager');
-//        /** @var \Night\SurveyBundle\Entity\Survey $survey */
-//        $survey = $em->getRepository(\Night\SurveyBundle\Entity\Survey::class)->find($surveyId);
-//        /** @var Survey $surveyService */
-//        $surveyService = $this->container->get("night_survey.survey");
-//
-//        $scsScore = [
-//            'hsx' => 10,
-//            'total_score' => 10,
-//            'max_score' => 10,
-//            'percent' => floor((10/10)*100)
-//        ];
-//
-//        $surveyService->sendEmail($survey, 'nightnr@gmail.com');
-//
-//        return new Response($this->renderView(
-//            '@NightSurvey/Default/email.html.twig',
-//            [
-//                'score'     => $scsScore,
-//                'surveyId'  => $survey->getId(),
-//                'id'        => $id
-//            ]
-//        ));
-//    }
+    public function emailAction(Request $request, $surveyId, $id)
+    {
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+        /** @var \Night\SurveyBundle\Entity\Survey $survey */
+        $survey = $em->getRepository(\Night\SurveyBundle\Entity\Survey::class)->find($surveyId);
+        /** @var Survey $surveyService */
+        $surveyService = $this->container->get("night_survey.survey");
+
+        $scsScore = [
+            'hsx' => 10,
+            'total_score' => 10,
+            'max_score' => 10,
+            'percent' => floor((10/10)*100)
+        ];
+
+        $surveyService->sendEmail($survey, 'nightnr@gmail.com');
+
+        return new Response($this->renderView(
+            '@NightSurvey/Default/email.html.twig',
+            [
+                'score'     => $scsScore,
+                'surveyId'  => $survey->getId(),
+                'id'        => $id
+            ]
+        ));
+    }
 }
