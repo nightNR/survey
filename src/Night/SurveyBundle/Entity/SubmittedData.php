@@ -91,7 +91,7 @@ class SubmittedData
     {
         /** @var DataHolder $formDataHolder */
         $formDataHolder = $this->data[$this->getFormId($question->getForm())];
-        return $formDataHolder[$question->getId()];
+        return isset($formDataHolder[$question->getId()])?$formDataHolder[$question->getId()]:null;
     }
 
     public function getFormId(Form $form)
