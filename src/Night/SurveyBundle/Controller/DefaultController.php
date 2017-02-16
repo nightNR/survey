@@ -6,6 +6,7 @@ use Night\SurveyBundle\Service\Survey;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DefaultController extends Controller
@@ -121,17 +122,28 @@ class DefaultController extends Controller
      */
 //    public function emailAction(Request $request, $surveyId, $id)
 //    {
+//        $em = $this->container->get('doctrine.orm.default_entity_manager');
+//        /** @var \Night\SurveyBundle\Entity\Survey $survey */
+//        $survey = $em->getRepository(\Night\SurveyBundle\Entity\Survey::class)->find($surveyId);
 //        /** @var Survey $surveyService */
 //        $surveyService = $this->container->get("night_survey.survey");
-//        $scsScore = $surveyService->getScsScore($surveyId, $id);
 //
-//        return $this->render(
+//        $scsScore = [
+//            'hsx' => 10,
+//            'total_score' => 10,
+//            'max_score' => 10,
+//            'percent' => floor((10/10)*100)
+//        ];
+//
+//        $surveyService->sendEmail($survey, 'nightnr@gmail.com');
+//
+//        return new Response($this->renderView(
 //            '@NightSurvey/Default/email.html.twig',
 //            [
 //                'score'     => $scsScore,
-//                'surveyId'  => $surveyId,
+//                'surveyId'  => $survey->getId(),
 //                'id'        => $id
 //            ]
-//        );
+//        ));
 //    }
 }

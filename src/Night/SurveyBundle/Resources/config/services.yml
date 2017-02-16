@@ -4,7 +4,7 @@ services:
 #        arguments: ["@service_id", "plain_value", "%parameter%"]
   night_survey.survey:
       class: Night\SurveyBundle\Service\Survey
-      arguments: ["@doctrine.orm.default_entity_manager", "@form.factory", "@session", "@swiftmailer.mailer", "@twig"]
+      arguments: ["@doctrine.orm.default_entity_manager", "@form.factory", "@session", "@swiftmailer.mailer", "@templating.engine.twig"]
 
   night_survey.image_type_extension:
       class: Night\SurveyBundle\Form\TypeExtension\ImageTypeExtension

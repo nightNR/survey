@@ -19,6 +19,7 @@ use Night\SurveyBundle\Entity\Question;
 use Night\SurveyBundle\Entity\SubmittedData;
 use Night\SurveyBundle\Entity\UniversalEnum;
 use Night\SurveyBundle\Strategy\InputTypeStrategy\InputTypeStrategyInterface;
+use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -43,7 +44,7 @@ class Survey
     protected $mailer;
 
     /**
-     * @var \Twig_Environment
+     * @var TwigEngine
      */
     protected $twig;
 
@@ -52,7 +53,7 @@ class Survey
      * @param EntityManagerInterface $em
      * @param FormFactoryInterface $formFactory
      */
-    public function __construct(EntityManagerInterface $em, FormFactoryInterface $formFactory, SessionInterface $session, \Swift_Mailer $mailer, \Twig_Environment $twig)
+    public function __construct(EntityManagerInterface $em, FormFactoryInterface $formFactory, SessionInterface $session, \Swift_Mailer $mailer, TwigEngine $twig)
     {
         $this->em = $em;
         $this->formFactory = $formFactory;
@@ -114,7 +115,7 @@ class Survey
         $this->em->flush();
 
         $email = $data->getQuestionResult($survey->getResultTargetQuestion());
-        if(!empty($email)) {
+        if (!empty($email)) {
             $this->sendEmail($survey, $email);
         }
 //        foreach ($survey->getForms() as $form) {
@@ -168,7 +169,7 @@ class Survey
         ];
         /** @var SubmittedData $result */
         $result = $this->em->find(SubmittedData::class, [
-            'id' => $id,
+            'id'     => $id,
             'survey' => $survey
         ]);
         $scsForm = $this->getScsForm();
@@ -177,26 +178,26 @@ class Survey
         $maxScore = 0;
         /** @var Question $question */
         foreach ($scsForm->getQuestions() as $question) {
-            if(empty($question->getGroup())) {
+            if (empty($question->getGroup())) {
                 continue;
             }
             $resultValue = $result->getQuestionResult($question);
             $totalScore += $resultValue;
             $maxValue = $this->getQuestionMaxValue($question);
-            $maxScore+=$maxValue;
-            if(array_key_exists($question->getGroup(), $scsNegativeMatrix)) {
+            $maxScore += $maxValue;
+            if (array_key_exists($question->getGroup(), $scsNegativeMatrix)) {
                 $resultValue = $maxValue + 1 - $resultValue;
             }
             $groupResults[$question->getGroup()][] = $resultValue;
         }
-        foreach($groupResults as $key => $result) {
+        foreach ($groupResults as $key => $result) {
             $groupResults[$key] = array_sum($result) / count($result);
         }
         return [
-            'hsx' => array_sum($groupResults),
+            'hsx'         => array_sum($groupResults),
             'total_score' => $totalScore,
-            'max_score' => $maxScore,
-            'percent' => floor(($totalScore/$maxScore)*100)
+            'max_score'   => $maxScore,
+            'percent'     => floor(($totalScore / $maxScore) * 100)
         ];
     }
 
@@ -212,14 +213,14 @@ class Survey
         ]);
 
         $output = [];
-        foreach($results as $result) {
+        foreach ($results as $result) {
             $survey = $result->getSurvey();
             /** @var Form[] $forms */
             $forms = $survey->getForms();
-            foreach($forms as $form) {
+            foreach ($forms as $form) {
                 /** @var Question $question */
-                foreach($form->getQuestions() as $question) {
-                    if(!array_key_exists($question->getId(), $output)) {
+                foreach ($form->getQuestions() as $question) {
+                    if (!array_key_exists($question->getId(), $output)) {
                         $output['name'][$question->getId()] = $question->getQuestionText();
                     }
                     $output[$result->getId()][$question->getId()] = $this->getQuestionResult($result, $question);
@@ -241,8 +242,8 @@ class Survey
         $enums = $question->getInputEnums();
         $maxValue = 0;
         /** @var UniversalEnum $enum */
-        foreach($enums as $enum) {
-            if($maxValue < $enum->getValue()) {
+        foreach ($enums as $enum) {
+            if ($maxValue < $enum->getValue()) {
                 $maxValue = $enum->getValue();
             }
         }
@@ -252,12 +253,12 @@ class Survey
     private function getQuestionResult(SubmittedData $result, Question $question)
     {
         $resultData = $result->getQuestionResult($question);
-        switch($question->getInputType()) {
+        switch ($question->getInputType()) {
             case "input_radio":
             case "input_choice":
                 /** @var UniversalEnum $enum */
-                foreach($question->getInputEnums() as $enum) {
-                    if($enum->getValue() == $resultData) {
+                foreach ($question->getInputEnums() as $enum) {
+                    if ($enum->getValue() == $resultData) {
                         $resultData = $enum->getLabel();
                         break;
                     }
@@ -272,11 +273,11 @@ class Survey
         $survey = $this->em->find(\Night\SurveyBundle\Entity\Survey::class, $surveyId);
         $allQuestions = new ArrayCollection();
         /** @var Form $form */
-        foreach($survey->getForms() as $form) {
+        foreach ($survey->getForms() as $form) {
             $allQuestions = new ArrayCollection(
                 array_merge(
                     $allQuestions->toArray(),
-                    $form->getQuestions()->filter(function(Question $question) {
+                    $form->getQuestions()->filter(function (Question $question) {
                         return $question->getImage() !== null && !empty($question->getRightAnswer());
                     })->toArray()
                 )
@@ -285,22 +286,21 @@ class Survey
         return $allQuestions;
     }
 
-    private function sendEmail(\Night\SurveyBundle\Entity\Survey $survey, $email)
+    public function sendEmail(\Night\SurveyBundle\Entity\Survey $survey, $email)
     {
         $scsScore = $this->getScsScore($survey->getId(), $this->session->getId());
-
         $message = \Swift_Message::newInstance()
             ->setSubject($survey->getTitle())
             ->setFrom('vyskum.emocii@gmail.com')
             ->setTo($email)
             ->setBody(
-                $this->twig->render('@NightSurvey/Default/email.html.twig', [
+                $this->twig->render('@NightSurvey/Default/email.html.twig',
                     [
-                        'score'     => $scsScore,
-                        'surveyId'  => $survey->getId(),
-                        'id'        => $this->session->getId()
+                        'score'    => $scsScore,
+                        'surveyId' => $survey->getId(),
+                        'id'       => $this->session->getId()
                     ]
-                ]),
+                ),
                 'text/html'
             );
         $this->mailer->send($message);
