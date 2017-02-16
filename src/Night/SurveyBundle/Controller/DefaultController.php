@@ -119,19 +119,19 @@ class DefaultController extends Controller
     /**
      * @Route("email/{surveyId}/{id}", name="email")
      */
-    public function emailAction(Request $request, $surveyId, $id)
-    {
-        /** @var Survey $surveyService */
-        $surveyService = $this->container->get("night_survey.survey");
-        $scsScore = $surveyService->getScsScore($surveyId, $id);
-
-        return $this->render(
-            '@NightSurvey/Default/email.html.twig',
-            [
-                'score'     => $scsScore,
-                'surveyId'  => $surveyId,
-                'id'        => $id
-            ]
-        );
-    }
+//    public function emailAction(Request $request, $surveyId, $id)
+//    {
+//        /** @var Survey $surveyService */
+//        $surveyService = $this->container->get("night_survey.survey");
+//        $scsScore = $surveyService->getScsScore($surveyId, $id);
+//
+//        return $this->render(
+//            '@NightSurvey/Default/email.html.twig',
+//            [
+//                'score'     => $scsScore,
+//                'surveyId'  => $surveyId,
+//                'id'        => $id
+//            ]
+//        );
+//    }
 }

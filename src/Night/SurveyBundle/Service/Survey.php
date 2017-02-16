@@ -289,7 +289,7 @@ class Survey
 
         $message = \Swift_Message::newInstance()
             ->setSubject($survey->getTitle())
-            ->setFrom('no-reply.vyskumemocii.sk')
+            ->setFrom('vyskum.emocii@gmail.com')
             ->setTo($email)
             ->setBody(
                 $this->twig->render('@NightSurvey/Default/email.html.twig', [
