@@ -291,7 +291,7 @@ class Survey
         $scsScore = $this->getScsScore($survey->getId(), $this->session->getId());
         $message = \Swift_Message::newInstance()
             ->setSubject($survey->getTitle())
-            ->setFrom('vyskum.emocii@gmail.com')
+            ->setFrom('noreply@vyskumemocii.sk')
             ->setTo($email)
             ->setBody(
                 $this->twig->render('@NightSurvey/Default/email.html.twig',
