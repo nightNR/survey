@@ -77,6 +77,12 @@ class Question
     private $order;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $rightAnswer;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -259,5 +265,21 @@ class Question
     public function setOrder($order)
     {
         $this->order = $order;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRightAnswer()
+    {
+        return $this->rightAnswer;
+    }
+
+    /**
+     * @param string $rightAnswer
+     */
+    public function setRightAnswer($rightAnswer)
+    {
+        $this->rightAnswer = $rightAnswer;
     }
 }

@@ -30,11 +30,11 @@ class DefaultController extends Controller
         if (!$session->isStarted()) {
             $session->start();
         }
-        if(!$session->has("current_page")) {
+        if (!$session->has("current_page")) {
             $session->set('current_page', 1);
         }
-        if($direction == "back" && $session->get("current_page") > 1) {
-            $session->set('current_page', $session->get("current_page")-1);
+        if ($direction == "back" && $session->get("current_page") > 1) {
+            $session->set('current_page', $session->get("current_page") - 1);
             return $this->redirectToRoute('form', [
                 "surveyId" => $surveyId
             ]);
@@ -60,7 +60,7 @@ class DefaultController extends Controller
                 $surveyService->save($surveyId);
                 return $this->redirectToRoute('result', [
                     "surveyId" => $surveyDTO->getSurveyId(),
-                    "id" => $session->getId()
+                    "id"       => $session->getId()
                 ]);
             }
         }
@@ -79,13 +79,15 @@ class DefaultController extends Controller
         $surveyService = $this->container->get("night_survey.survey");
         $surveyDTO = $surveyService->getSurveyData($surveyId, 1);
         $scsScore = $surveyService->getScsScore($surveyId, $id);
+        $answeredQuestions = $surveyService->getAnsweredQuestions($surveyId);
         return $this->render(
             '@NightSurvey/Default/result.html.twig',
             [
-                'surveyDTO' => $surveyDTO,
-                'score' => $scsScore
+                'surveyDTO'         => $surveyDTO,
+                'score'             => $scsScore,
+                'answeredQuestions' => $answeredQuestions
             ]
-            );
+        );
     }
 
     /**
@@ -100,11 +102,11 @@ class DefaultController extends Controller
         $output = $surveyService->getResultAsCsv($surveyId);
 
         $response = new StreamedResponse();
-        $response->setCallback(function() use ($output) {
+        $response->setCallback(function () use ($output) {
             $handle = fopen('php://output', 'w+');
 
-            foreach($output as $row) {
-                fputcsv($handle, $row,';');
+            foreach ($output as $row) {
+                fputcsv($handle, $row, ';');
             }
             fclose($handle);
         });
@@ -112,5 +114,24 @@ class DefaultController extends Controller
         $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
         $response->headers->set('Content-Disposition', 'attachment; filename="export.csv"');
         return $response;
+    }
+
+    /**
+     * @Route("email/{surveyId}/{id}", name="email")
+     */
+    public function emailAction(Request $request, $surveyId, $id)
+    {
+        /** @var Survey $surveyService */
+        $surveyService = $this->container->get("night_survey.survey");
+        $scsScore = $surveyService->getScsScore($surveyId, $id);
+
+        return $this->render(
+            '@NightSurvey/Default/email.html.twig',
+            [
+                'score'     => $scsScore,
+                'surveyId'  => $surveyId,
+                'id'        => $id
+            ]
+        );
     }
 }

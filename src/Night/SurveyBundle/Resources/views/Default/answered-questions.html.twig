@@ -1,0 +1,25 @@
+{% block body %}
+    <div class="well">
+        <h2>Kľúč k tvárovým emóciám</h2>
+        {% set count = 0 %}
+        {% for answeredQuestion in answeredQuestions %}
+            {% if count is even %}
+                <div class="row">
+            {% endif %}
+            <div class="col-sm-6 col-md-6">
+                <div class="thumbnail">
+                    <img src="{{ answeredQuestion.image.path }}" alt="{{ answeredQuestion.image.alt }}" style="max-height: 432px;">
+                    <div class="caption">
+                        <h4>{{ answeredQuestion.questionText }}</h4>
+                        <p>Správna odpoveď: {{ answeredQuestion.rightAnswer }}</p>
+                    </div>
+                </div>
+            </div>
+            {% if count is odd %}
+                </div>
+            {% endif %}
+            {% set count = count + 1 %}
+        {% endfor %}
+
+    </div>
+{% endblock %}

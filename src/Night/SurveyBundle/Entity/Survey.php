@@ -48,6 +48,12 @@ class Survey
     private $submittedData;
 
     /**
+     * @var Question
+     * @ORM\ManyToOne(targetEntity="Night\SurveyBundle\Entity\Question")
+     */
+    private $resultTargetQuestion;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -138,4 +144,19 @@ class Survey
         $this->submittedData[] = $submittedData;
     }
 
+    /**
+     * @return Question
+     */
+    public function getResultTargetQuestion()
+    {
+        return $this->resultTargetQuestion;
+    }
+
+    /**
+     * @param Question $resultTargetQuestion
+     */
+    public function setResultTargetQuestion($resultTargetQuestion)
+    {
+        $this->resultTargetQuestion = $resultTargetQuestion;
+    }
 }

@@ -9,6 +9,8 @@
 namespace Night\SurveyBundle\Service;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Night\SurveyBundle\DTO\SurveyDTO;
 use Night\SurveyBundle\Entity\DataHolder;
@@ -36,6 +38,14 @@ class Survey
 
     /** @var  SessionInterface */
     protected $session;
+
+    /** @var  \Swift_Mailer */
+    protected $mailer;
+
+    /**
+     * @var \Twig_Environment
+     */
+    protected $twig;
 
     /**
      * Survey constructor.
@@ -100,6 +110,15 @@ class Survey
 
         $this->em->persist($data);
         $this->em->flush();
+
+        $email = $data->getQuestionResult($survey->getResultTargetQuestion());
+        if(!empty($email)) {
+            $this->sendEmail($survey, $email);
+        }
+//        foreach ($survey->getForms() as $form) {
+//            $sessionKey = $this->getSessionKeyFromForm($form);
+//            $this->session->remove($sessionKey);
+//        }
     }
 
     /**
@@ -244,5 +263,44 @@ class Survey
                 break;
         }
         return $resultData;
+    }
+
+    public function getAnsweredQuestions($surveyId)
+    {
+        $survey = $this->em->find(\Night\SurveyBundle\Entity\Survey::class, $surveyId);
+        $allQuestions = new ArrayCollection();
+        /** @var Form $form */
+        foreach($survey->getForms() as $form) {
+            $allQuestions = new ArrayCollection(
+                array_merge(
+                    $allQuestions->toArray(),
+                    $form->getQuestions()->filter(function(Question $question) {
+                        return $question->getImage() !== null && !empty($question->getRightAnswer());
+                    })->toArray()
+                )
+            );
+        }
+        return $allQuestions;
+    }
+
+    private function sendEmail(\Night\SurveyBundle\Entity\Survey $survey, $email)
+    {
+        $scsScore = $this->getScsScore($survey->getId(), $this->session->getId());
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject($survey->getTitle())
+            ->setFrom('no-reply.vyskumemocii.sk')
+            ->setTo($email)
+            ->setBody(
+                $this->twig->render('@NightSurvey/Default/email.html.twig', [
+                    [
+                        'score'     => $scsScore,
+                        'surveyId'  => $survey->getId(),
+                        'id'        => $this->session->getId()
+                    ]
+                ]),
+                'text/html'
+            );
+        $this->mailer->send($message);
     }
 }
