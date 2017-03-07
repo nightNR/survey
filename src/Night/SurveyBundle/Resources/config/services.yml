@@ -11,6 +11,11 @@ services:
       tags:
         - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\TextType }
 
+  night_survey.image_choice_type_extension:
+        class: Night\SurveyBundle\Form\TypeExtension\ImageChoiceTypeExtension
+        tags:
+          - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\ChoiceType }
+
   night_survey.input_type.text:
       class: Night\SurveyBundle\Strategy\InputTypeStrategy\InputTextStrategy
       arguments: ["@form.factory"]
