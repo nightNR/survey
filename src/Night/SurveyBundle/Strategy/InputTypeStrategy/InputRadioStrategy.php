@@ -56,7 +56,8 @@ class InputRadioStrategy implements InputTypeStrategyInterface
                 "choices" => $optionsChoices,
                 "expanded" => true,
                 "multiple" => false,
-                "constraints" => $constraints
+                "constraints" => $constraints,
+                "image" => $question->getImage()
             ]
         );
     }

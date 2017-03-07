@@ -143,3 +143,20 @@
         {% endif %}
     {% endspaceless %}
 {% endblock form_widget_simple %}
+
+{% block choice_widget_expanded %}
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }}>
+            {% for child in form %}
+                {% if multiple %}
+                    {{ checkbox_row(child, { 'no_form_group': true, 'inline' : (attr.inline is defined and attr.inline), 'label_attr': label_attr }) }}
+                {% else %}
+                    {{ radio_row(child, { 'no_form_group': true, 'inline' : (attr.inline is defined and attr.inline), 'label_attr': label_attr  }) }}
+                {% endif %}
+            {% endfor %}
+            {% if image is defined and image is not empty %}
+                <img src="{{ image.path }}" class="img-responsive img-thumbnail" alt="{{ image.alt }}">
+            {% endif %}
+        </div>
+    {% endspaceless %}
+{% endblock choice_widget_expanded %}
