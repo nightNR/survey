@@ -54,7 +54,8 @@ class InputChoiceStrategy implements InputTypeStrategyInterface
                 "label" => $question->getQuestionText(),
                 "required" => true,
                 "choices" => $optionsChoices,
-                "constraints" => $constraints
+                "constraints" => $constraints,
+                "image" => $question->getImage()
             ]
         );
     }
