@@ -347,6 +347,7 @@ class RangeInput extends AbstractType
             $maxKey = null;
             foreach($choices as $key => $choice) {
                 if($maxKey === null || $maxKey < $key) {
+                    $maxKey = $key;
                     $label = $options['choice_label']($key, $choice);
                 }
             }

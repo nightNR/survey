@@ -90,6 +90,9 @@ class SubmittedData
     public function getQuestionResult(Question $question)
     {
         /** @var DataHolder $formDataHolder */
+        if(!isset($this->data[$this->getFormId($question->getForm())])) {
+            return null;
+        }
         $formDataHolder = $this->data[$this->getFormId($question->getForm())];
         return isset($formDataHolder[$question->getId()])?$formDataHolder[$question->getId()]:null;
     }
