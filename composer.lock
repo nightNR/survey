@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d88abd168c47024189efd21b2722f97d",
+    "content-hash": "1c2e4b064cadeea46010cce5d5f15cc0",
     "packages": [
         {
             "name": "braincrafted/bootstrap-bundle",
@@ -2230,28 +2230,84 @@
             "time": "2016-12-13T12:16:34+00:00"
         },
         {
-            "name": "twbs/bootstrap",
-            "version": "v3.0.3",
+            "name": "timhovius/bootstrap-material-design",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twbs/bootstrap.git",
-                "reference": "6d03173a1aad98e75f7d33e65b411c519176c59a"
+                "url": "https://github.com/timhovius/bootstrap-material-design.git",
+                "reference": "4e5ad1a2661abd72ae972f38f276f047192f2d1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/6d03173a1aad98e75f7d33e65b411c519176c59a",
-                "reference": "6d03173a1aad98e75f7d33e65b411c519176c59a",
+                "url": "https://api.github.com/repos/timhovius/bootstrap-material-design/zipball/4e5ad1a2661abd72ae972f38f276f047192f2d1f",
+                "reference": "4e5ad1a2661abd72ae972f38f276f047192f2d1f",
                 "shasum": ""
+            },
+            "require": {
+                "twbs/bootstrap": "~3.2"
+            },
+            "suggest": {
+                "braincrafted/bootstrap-bundle": "BraincraftedBootstrapBundle integrates Bootstrap into Symfony2 by providing templates, Twig extensions, services and commands."
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tim Hovius",
+                    "email": "timhovius@gmail.com"
+                },
+                {
+                    "name": "Federico Zivolo"
+                }
+            ],
+            "description": "Bootstrap material theme for Symfony2",
+            "keywords": [
+                "JS",
+                "Symfony2",
+                "bundle",
+                "css",
+                "design",
+                "framework",
+                "front-end",
+                "google",
+                "less",
+                "material",
+                "mobile-first",
+                "responsive",
+                "symfony",
+                "web"
+            ],
+            "time": "2015-09-15 11:08:22"
+        },
+        {
+            "name": "twbs/bootstrap",
+            "version": "v3.3.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/0b9c4a4007c44201dce9a6cc1a38407005c26c86",
+                "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86",
+                "shasum": ""
+            },
+            "replace": {
+                "twitter/bootstrap": "self.version"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.x-dev"
+                    "dev-master": "3.3.x-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "Apache-2.0"
+                "MIT"
             ],
             "authors": [
                 {
@@ -2263,13 +2319,19 @@
                     "email": "markdotto@gmail.com"
                 }
             ],
-            "description": "Sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.",
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
             "homepage": "http://getbootstrap.com",
             "keywords": [
-                "bootstrap",
-                "css"
+                "JS",
+                "css",
+                "framework",
+                "front-end",
+                "less",
+                "mobile-first",
+                "responsive",
+                "web"
             ],
-            "time": "2013-12-05T16:09:10+00:00"
+            "time": "2016-07-25T15:51:55+00:00"
         },
         {
             "name": "twig/twig",
@@ -2444,7 +2506,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "timhovius/bootstrap-material-design": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

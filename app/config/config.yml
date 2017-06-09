@@ -79,6 +79,8 @@ assetic:
         bootstrap_css:
             inputs:
                 - "%kernel.root_dir%/../vendor/twbs/bootstrap/less/bootstrap.less"
+                - "%kernel.root_dir%/../vendor/timhovius/bootstrap-material-design/less/ripples.less"
+                - "%kernel.root_dir%/../vendor/timhovius/bootstrap-material-design/less/material.less"
                 - "%kernel.root_dir%/../vendor/braincrafted/bootstrap-bundle/Braincrafted/Bundle/BootstrapBundle/Resources/less/form.less"
             filters:
                 - less
@@ -98,6 +100,8 @@ assetic:
                 - "%kernel.root_dir%/../vendor/twbs/bootstrap/js/scrollspy.js"
                 - "%kernel.root_dir%/../vendor/twbs/bootstrap/js/tab.js"
                 - "%kernel.root_dir%/../vendor/twbs/bootstrap/js/affix.js"
+                - "%kernel.root_dir%/../vendor/timhovius/bootstrap-material-design/scripts/ripples.js"
+                - "%kernel.root_dir%/../vendor/timhovius/bootstrap-material-design/scripts/material.js"
                 - "%kernel.root_dir%/../vendor/braincrafted/bootstrap-bundle/Braincrafted/Bundle/BootstrapBundle/Resources/js/bc-bootstrap-collection.js"
             output: js/bootstrap.js
         theme_css:
@@ -118,5 +122,7 @@ assetic:
 braincrafted_bootstrap:
     css_preprocessor: less
     fonts_dir: "%kernel.root_dir%/../web/fonts"
+    assets_dir: "%kernel.root_dir%/../vendor/timhovius/bootstrap-material-design"
     auto_configure:
         twig: false
+        assetic: false

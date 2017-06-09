@@ -21,4 +21,5 @@ if(!window.Survey) {
 
 $(function(){
     Survey.init();
+    $.material.init();
 });
