@@ -236,7 +236,7 @@ class Survey
     {
         return current($this->em->getRepository(Form::class)->findBy([
             'survey' => $this->em->getRepository(Entity\Survey::class)->find($surveyId),
-            'is_ssc' => true
+            'isSsc' => true
         ]));
     }
 
