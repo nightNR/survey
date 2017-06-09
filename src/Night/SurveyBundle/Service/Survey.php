@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Night\SurveyBundle\DTO\SurveyDTO;
 use Night\SurveyBundle\Entity\DataHolder;
 use Night\SurveyBundle\Entity\Form;
+use Night\SurveyBundle\Entity;
 use Night\SurveyBundle\Entity\Question;
 use Night\SurveyBundle\Entity\SubmittedData;
 use Night\SurveyBundle\Entity\UniversalEnum;
@@ -234,7 +235,7 @@ class Survey
     private function getScsForm($surveyId)
     {
         return current($this->em->getRepository(Form::class)->findBy([
-            'survey' => $this->em->getRepository(Survey::class)->find($surveyId),
+            'survey' => $this->em->getRepository(Entity\Survey::class)->find($surveyId),
             'is_ssc' => true
         ]));
     }
