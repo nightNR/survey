@@ -58,10 +58,11 @@ class DefaultController extends Controller
                     "surveyId" => $surveyDTO->getSurveyId()
                 ]);
             } else {
+                $sessionId = $session->getId();
                 $surveyService->save($surveyId);
                 return $this->redirectToRoute('result', [
                     "surveyId" => $surveyDTO->getSurveyId(),
-                    "id"       => $session->getId()
+                    "id"       => $sessionId
                 ]);
             }
         }
