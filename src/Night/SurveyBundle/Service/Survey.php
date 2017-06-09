@@ -124,6 +124,7 @@ class Survey
             $this->session->remove($sessionKey);
         }
         $this->session->clear();
+        $this->session->migrate(true);
     }
 
     /**
