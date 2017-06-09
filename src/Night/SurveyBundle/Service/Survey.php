@@ -173,7 +173,7 @@ class Survey
             'id'     => $id,
             'survey' => $survey
         ]);
-        $scsForm = $this->getScsForm();
+        $scsForm = $this->getScsForm($survey);
         $totalScore = 0;
         $groupResults = [];
         $maxScore = 0;
@@ -231,10 +231,11 @@ class Survey
         return $output;
     }
 
-    private function getScsForm()
+    private function getScsForm($surveyId)
     {
         return current($this->em->getRepository(Form::class)->findBy([
-            "id" => '9845353e-db4a-11e6-bf26-cec0c932ce03'
+            'survey_id' => $surveyId,
+            'is_ssc' => true
         ]));
     }
 

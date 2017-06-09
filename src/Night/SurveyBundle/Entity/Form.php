@@ -56,6 +56,13 @@ class Form
      * @ORM\OrderBy({"order": "ASC"})
      */
     private $questions;
+
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean",  options={"default": false})
+     */
+    private $isScs = false;
+
     /**
      * Constructor
      */
@@ -183,5 +190,21 @@ class Form
     public function getQuestions()
     {
         return $this->questions;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIsScs()
+    {
+        return $this->isScs;
+    }
+
+    /**
+     * @param bool $isScs
+     */
+    public function setIsScs($isScs)
+    {
+        $this->isScs = $isScs;
     }
 }
