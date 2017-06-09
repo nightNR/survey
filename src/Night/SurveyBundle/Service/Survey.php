@@ -234,7 +234,7 @@ class Survey
     private function getScsForm($surveyId)
     {
         return current($this->em->getRepository(Form::class)->findBy([
-            'survey_id' => $surveyId,
+            'survey' => $this->em->getRepository(Survey::class)->find($surveyId),
             'is_ssc' => true
         ]));
     }
