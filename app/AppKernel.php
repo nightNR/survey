@@ -19,8 +19,13 @@ class AppKernel extends Kernel
 
             new \Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new \Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
 
             new Night\SurveyBundle\NightSurveyBundle(),
+            new UserBundle\UserBundle(),
+            new Night\HwiOAuthExtendBundle\HwiOAuthExtendBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

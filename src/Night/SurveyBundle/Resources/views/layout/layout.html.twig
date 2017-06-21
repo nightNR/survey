@@ -17,11 +17,23 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" src="#">VyskumEmocii.sk</a>
+            <a class="navbar-brand" href="{{ path('homepage') }}">VyskumEmocii.sk</a>
         </div>
+        <ul class="nav navbar-nav navbar-right">
+            {% include 'NightSurveyBundle:layout:user.html.twig' %}
+        </ul>
     </div>
 </nav>
 <div class="container">
+    <div class="container-fluid" id="flash-messages">
+        {% if app.session.flashBag.has('success') %}
+            <div class="alert alert-success">
+                {% for msg in app.session.flashBag.get('success') %}
+                    {{ msg }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
     {% block body %}
     {% endblock %}
     <div class="panel panel-default">
@@ -29,6 +41,11 @@
             Ďakujeme sponzorovi <img src="{{ asset('bundles/nightsurvey/img/white.png') }}">
         </div>
     </div>
+</div>
+<div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="LoginModal" style="padding-top: 150px">
+    {% if app.user is empty %}
+        {{ render(controller('FOSUserBundle:Security:loginModal')) }}
+    {% endif %}
 </div>
 <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
 <script src="{{ asset('js/jquery.js') }}"></script>

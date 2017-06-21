@@ -1,0 +1,40 @@
+{% trans_default_domain 'UserBundle' %}
+
+<div class="panel panel-default" style="box-shadow: none">
+    <div class="row">
+        <div class="col-xs-6 col-md-3">
+            <a href="#" class="thumbnail">
+                <img src="{{ gravatar(app.user.email, 160, 'g') }}" alt="...">
+            </a>
+            <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-primary btn-block">{{ 'user.edit_profile'|trans }}</a>
+            <a href="{{ path("hwi_oauth_connect_service", {service: "facebook"}) }}" class="btn btn-primary btn-block btn-social btn-facebook {% if user.facebookLogin is not null %}disabled{% endif %}"><span class="fa fa-facebook"></span>{% if user.facebookLogin is not null %}{{ 'security.connect.facebook_connected'|trans }}{% else %}{{ 'security.connect.facebook'|trans }}{% endif %}</a>
+            <a href="{{ path("hwi_oauth_connect_service", {service: "google"}) }}" class="btn btn-primary btn-block btn-social btn-google {% if user.googleLogin is not null %}disabled{% endif %}"><span class="fa fa-google"></span>{% if user.googleLogin is not null %}{{ 'security.connect.google_connected'|trans }}{% else %}{{ 'security.connect.google'|trans }}{% endif %}</a>
+        </div>
+        <div class="col-xs-6 col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="page-header">
+                        <h1>{{ user.username }}</h1>
+                    </div>
+                    <div class="col-xs-2 col-md-3">
+                        <div class="row text-right">
+                            <strong>{{ 'user.email'|trans }}:</strong>
+                        </div>
+                        <div class="row text-right">
+                            <strong>{{ 'user.last_login'|trans }}:</strong>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-md-6">
+                        <div class="row text-left">
+                            {{ user.email }}
+                        </div>
+                        <div class="row text-left">
+                            {{ user.lastLogin|date("d.m.Y H:i:s") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

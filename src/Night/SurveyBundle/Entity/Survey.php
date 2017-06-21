@@ -10,6 +10,7 @@ namespace Night\SurveyBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use UserBundle\Entity\User;
 
 /**
  * Class Form
@@ -38,6 +39,7 @@ class Survey
     /**
      * @var ArrayCollection<Form>
      * @ORM\OneToMany(targetEntity="Form", mappedBy="survey")
+     * @ORM\OrderBy(value={"order": "ASC"})
      */
     private $forms;
 
@@ -52,6 +54,12 @@ class Survey
      * @ORM\ManyToOne(targetEntity="Night\SurveyBundle\Entity\Question")
      */
     private $resultTargetQuestion;
+
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="surveys")
+     */
+    private $owner;
 
     /**
      * Constructor
@@ -158,5 +166,18 @@ class Survey
     public function setResultTargetQuestion($resultTargetQuestion)
     {
         $this->resultTargetQuestion = $resultTargetQuestion;
+    }
+
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(User $user)
+    {
+        $this->owner = $user;
+        if(!$user->hasSurvey($this)){
+            $user->addSurvey($this);
+        }
     }
 }

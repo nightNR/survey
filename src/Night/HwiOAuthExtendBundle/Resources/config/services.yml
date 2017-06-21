@@ -1,0 +1,4 @@
+services:
+#    hwi_o_auth_extend.example:
+#        class: Night\HwiOAuthExtendBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]

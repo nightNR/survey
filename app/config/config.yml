@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: "@UserBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -57,8 +58,18 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+        entity_managers:
+            default:
+#                        auto_generate_proxy_classes: "%kernel.debug%"
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+#                auto_mapping: true
+                mappings:
+                    NightSurveyBundle:
+                        type: annotation
+                    UserBundle:
+                        type: annotation
+                    FOSUserBundle:
+                        type: ~
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -126,3 +137,45 @@ braincrafted_bootstrap:
     auto_configure:
         twig: false
         assetic: false
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: UserBundle\Entity\User
+    from_email:
+          address:  'registrator@publeash.nightnr.com'
+          sender_name:  'PubLeash - Registrator'
+    registration:
+          confirmation:
+            enabled: true
+          form:
+            type: app_user_registration
+    profile:
+          form:
+            type: fos_user_profile
+
+hwi_oauth:
+    # list of names of the firewalls in which this bundle is active, this setting MUST be set
+    firewall_names: [main]
+    connect:
+            account_connector: app.user_provider
+    fosub:
+            username_iterations: 30
+            properties:
+                facebook:    facebook_id
+                google: google_id
+    resource_owners:
+        facebook:
+            type:                facebook
+            client_id:           241337559701820
+            client_secret:       93964467c16fce85e49db35b577ff08d
+            scope:               "email"
+            options:
+                display: popup
+        google:
+            type: google
+            client_id: "256003520636-bftpaa593b5k2kbn051cccbdvo9l5pu9.apps.googleusercontent.com"
+            client_secret: "AMgXcbNlSgnUBPV_UI52xpxi"
+            scope: "email profile"
+
+ornicar_gravatar: ~

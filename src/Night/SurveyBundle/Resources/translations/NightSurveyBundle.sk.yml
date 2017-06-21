@@ -1,0 +1,7 @@
+trans:
+    surveys: Moje dotazníky
+
+administration:
+    title: "Administracia dotaznikov"
+    survey:
+        list: 'Zoznam dotazníkov'

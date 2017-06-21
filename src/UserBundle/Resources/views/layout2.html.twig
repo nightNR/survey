@@ -1,0 +1,9 @@
+{% extends (render_base_layout is not defined or render_base_layout == true)?"@NightSurvey/Default/index.html.twig":"@User/none.html.twig" %}
+
+{% block body %}
+    {#<div class="container">#}
+        <div class="well center-block" style="max-width: 800px; border: none; box-shadow: 0px">
+            {% block fos_user_content %}{% endblock %}
+        </div>
+    {#</div>#}
+{% endblock %}

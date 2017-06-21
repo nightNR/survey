@@ -1,0 +1,48 @@
+{% extends '@NightSurvey/Admin/base.html.twig' %}
+
+{% block panel_title %}
+    {{ surveyAdminListDTO.title|trans }}
+{% endblock %}
+{% block admin_content %}
+    {% for form in surveyAdminListDTO.forms %}
+        <a href="{{ path('night_survey_admin_surveyedit', {"surveyId": form.id}) }}" class="list-group-item button">{{ form.order }} | {{ form.topic }}</a>
+    {% endfor %}
+{% endblock %}
+{% block footer_nav %}
+    <ul class="pagination">
+        <li {% if surveyAdminListDTO.page == 1 %}class="disabled"{% endif %}>
+            <a href="
+                        {% if surveyAdminListDTO.page == 1 %}
+                        #
+                        {% else %}
+                        {{ path('night_survey_admin_surveyedit', {"page": surveyAdminListDTO.page-1, "surveyId": surveyAdminListDTO.survey_id}) }}
+                        {% endif %}
+                " aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% set min_page = max(1, surveyAdminListDTO.page - 2) %}
+        {% set max_page = min(surveyAdminListDTO.page + 2, surveyAdminListDTO.page_count) %}
+        {% for page in min_page..max_page %}
+            <li {% if page == surveyAdminListDTO.page %} class="active"{% endif %}><a href="
+                        {% if page == surveyAdminListDTO.page %}
+                            #
+                        {% else %}
+                            {{ path('night_survey_admin_surveyedit', {"page": page, "surveyId": surveyAdminListDTO.survey_id}) }}
+                        {% endif %}
+                    ">{{ page }}</a></li>
+        {% endfor %}
+
+        <li {% if surveyAdminListDTO.page == surveyAdminListDTO.page_count %}class="disabled"{% endif %}>
+            <a href="
+                        {% if surveyAdminListDTO.page == surveyAdminListDTO.page_count %}
+                        #
+                        {% else %}
+                        {{ path('night_survey_admin_surveyedit', {"page": surveyAdminListDTO.page+1, "surveyId": surveyAdminListDTO.survey_id}) }}
+                        {% endif %}
+                    " aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends '@NightSurvey/layout/layout.html.twig' %}
+{% trans_default_domain 'NightSurveyBundle' %}
+
+{% block body %}
+    <div class="page-header"><h1>{{ 'administration.title'|trans }}</h1></div>
+    <div class="panel panel-default">
+        {% if surveyAdminListDTO.title is not empty %}
+            <div class="panel-heading">
+                <div class="panel-title">
+                    {% block panel_title %}{% endblock %}
+                </div>
+            </div>
+        {% endif %}
+        <div class="panel-body">
+            {% block admin_content %}
+            {% endblock %}
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="footer-nav" style="text-align: center">
+                {% block footer_nav %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
