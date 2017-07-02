@@ -5,3 +5,6 @@ administration:
     title: "Administracia dotaznikov"
     survey:
         list: 'Zoznam dotazníkov'
+    messages:
+        change_order:
+            ok: 'Poradie zmenene'

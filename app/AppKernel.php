@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
+            new \JMS\SerializerBundle\JMSSerializerBundle(),
 
             new Night\SurveyBundle\NightSurveyBundle(),
             new UserBundle\UserBundle(),

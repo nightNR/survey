@@ -51,3 +51,21 @@ services:
                 arguments: ["@form.factory"]
                 tags:
                     - {name: "night_survey.input_type_strategy"}
+
+  api:
+        class: Night\SurveyBundle\Service\Api
+        arguments: [@doctrine.orm.default_entity_manager]
+
+  api_setting:
+        class: Night\SurveyBundle\Service\ApiCommands\Setting
+        arguments: [@doctrine.orm.default_entity_manager]
+        tags:
+              - { name: api.service }
+
+  api_survey:
+          class: Night\SurveyBundle\Service\ApiCommands\Survey
+          arguments:
+                - @doctrine.orm.default_entity_manager
+                - @translator
+          tags:
+                - { name: api.service }

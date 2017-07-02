@@ -34,7 +34,7 @@ class Form
 
     /**
      * @var integer
-     * @ORM\Column(type="smallint", nullable=false, options={"default": 1, "unsigned": true})
+     * @ORM\Column(name="display_order", type="smallint", nullable=false, options={"default": 1, "unsigned": true})
      */
     private $order;
 

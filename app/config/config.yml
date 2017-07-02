@@ -119,6 +119,8 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/../src/Night/SurveyBundle/Resources/css/theme.css"
                 - "%kernel.root_dir%/../src/Night/SurveyBundle/Resources/css/circle.css"
+                - "%kernel.root_dir%/../src/Night/SurveyBundle/Resources/css/jquery-ui.min.css"
+                - "%kernel.root_dir%/../src/Night/SurveyBundle/Resources/css/jquery-ui.structure.min.css"
             output: css/theme.css
         jquery:
             inputs:
@@ -127,6 +129,7 @@ assetic:
         application:
             inputs:
                 - "%kernel.root_dir%/../src/Night/SurveyBundle/Resources/js/application.js"
+                - "%kernel.root_dir%/../src/Night/SurveyBundle/Resources/js/jquery-ui.min.js"
             output: js/application.js
 
 

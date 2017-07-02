@@ -5,9 +5,11 @@
     {{ surveyAdminListDTO.title|trans }}
 {% endblock %}
 {% block admin_content %}
+    <div class="sortable-table">
     {% for survey in surveyAdminListDTO.surveys %}
             <a href="{{ path('night_survey_admin_surveyedit', {"surveyId": survey.id}) }}" class="list-group-item button">{{ survey.title }}</a>
     {% endfor %}
+    </div>
 {% endblock %}
 {% block footer_nav %}
             <ul class="pagination">
