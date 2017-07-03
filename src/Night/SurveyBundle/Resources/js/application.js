@@ -7,6 +7,11 @@ if(!window.Survey) {
             Survey.form.registerSubmitListener();
             Survey.flashMessages.registerListener();
             Survey.list.enableSort();
+            Survey.admin.tools.init();
+        },
+
+        globalState: {
+            'edited_survey': null
         },
 
         form: {
@@ -115,7 +120,127 @@ if(!window.Survey) {
                 });
             },
             handleResponse: function(data) {
+                for(var entry in data) {
+                    if(data.hasOwnProperty(entry)) {
+                        switch(entry) {
+                            case 'flashMessage':
+                                Survey.flashMessages.addFlashMessage(data[entry].status, data[entry].message);
+                                break;
+                            case 'form':
+                                Survey.admin.tools.form.clear();
+                                Survey.admin.tools.openForm(data[entry]);
+                                break;
+                            case 'closeModal':
+                                Survey.admin.tools.form.closeModal(data[entry]);
+                                break;
+                            case 'reload':
+                                Survey.admin.tools.reload(data[entry]);
+                        }
+                    }
+                }
                 Survey.flashMessages.addFlashMessage(data.status, data.message);
+            },
+            tools: {
+                init: function () {
+                    $('.tools').find('button').each(function () {
+                        $(this).on('click', function (event) {
+                            event.preventDefault();
+                            Survey.admin.tools.runCommand(this);
+                        })
+                    });
+                    $('#admin-modal').on('hidden.bs.modal', Survey.admin.tools.form.clear);
+                },
+                runCommand: function(element) {
+                    switch($(element).data('action')) {
+                        case 'add-survey':
+                            $('#admin-modal').modal('show');
+                            Survey.admin.makeApiCall('survey', 'createOrEditSurvey', {}, Survey.admin.handleResponse);
+                            console.log('add');
+                            console.log(element);
+                            break;
+                        case 'edit-survey':
+                            Survey.globalState.edited_survey = $(element).data('id');
+                            $('#admin-modal').modal('show');
+                            Survey.admin.makeApiCall('survey', 'createOrEditSurvey', {'data': {
+                                'survey_id': $(element).data('id')
+                            }}, Survey.admin.handleResponse);
+                            console.log('edit');
+                            console.log(element);
+                            break;
+                        case 'delete-survey':
+                            Survey.admin.makeApiCall('survey', 'removeSurvey', {'data': {
+                                'survey_id': $(element).data('id')
+                            }}, Survey.admin.handleResponse);
+                            break;
+                    }
+                },
+                openForm: function(data) {
+                    var loading = $('#admin-modal').find('.loading');
+                    loading.hide();
+                    loading.parent().append(data);
+                    loading.parent().find('form').submit(function(e){
+                        e.preventDefault();
+                        Survey.admin.tools.form.submitData(this);
+                    });
+                    console.log(data);
+                },
+                reload: function(timer) {
+                    setTimeout(function(){
+                        location.reload();
+                    }, timer);
+                },
+                form: {
+                    submitData: function(form) {
+                        var formData = $(form).serializeArray();
+                        var service = null;
+                        var action = null;
+                        switch($(form).attr('name')) {
+                            case 'survey':
+                                service = 'survey';
+                                action = 'createOrEditSurvey';
+                                break;
+                        }
+                        Survey.admin.tools.form.makeApiCall(service, action, formData, Survey.admin.handleResponse)
+                    },
+                    makeApiCall: function(service, command, data, callback) {
+                        dataObject = data;
+                        dataObject.push({
+                            'name': 'command',
+                            'value': command
+                        });
+                        dataObject.push({
+                            'name': 'service',
+                            'value': service
+                        });
+                        dataObject.push({
+                            'name': 'data[survey_id][survey_id]',
+                            'value': Survey.globalState.edited_survey
+                        });
+                        console.log(data);
+                        $.ajax({
+                            url: apiUrl,
+                            method: 'POST',
+                            data: dataObject,
+                            success: function(data) {
+                                callback(data);
+                            }
+                        });
+                    },
+                    clear: function (e) {
+                        $('#admin-modal').find('form').each(function () {
+                            $(this).remove();
+                        });
+                        $('#admin-modal').find('h2').each(function () {
+                            $(this).remove();
+                        });
+                        $('#admin-modal').find('.loading').show();
+                    },
+                    closeModal: function(timer) {
+                        setTimeout(function(){
+                            $('#admin-modal').modal('hide');
+                        }, timer)
+                    }
+                }
             }
         }
     }

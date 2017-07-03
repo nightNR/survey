@@ -2,12 +2,21 @@
 {% trans_default_domain 'NightSurveyBundle' %}
 
 {% block panel_title %}
-    {{ surveyAdminListDTO.title|trans }}
+    <span class="title">{{ surveyAdminListDTO.title|trans }}</span>
+    <div class="btn btn-group btn-group-flat tools">
+        <button class="btn btn-material-green fa fa-plus-square fa-2x" aria-hidden="true" data-action="add-survey"></button>
+    </div>
 {% endblock %}
 {% block admin_content %}
     <div class="sortable-table">
     {% for survey in surveyAdminListDTO.surveys %}
-            <a href="{{ path('night_survey_admin_surveyedit', {"surveyId": survey.id}) }}" class="list-group-item button">{{ survey.title }}</a>
+            <a href="{{ path('night_survey_admin_surveyedit', {"surveyId": survey.id}) }}" class="list-group-item button">
+                <span class="title">{{ survey.title }}</span>
+                <div class="btn btn-group btn-group-flat tools">
+                    <button class="btn btn-material-green fa fa-pencil-square fa-2x" data-id="{{ survey.id }}" data-action="edit-survey"></button>
+                    <button class="btn btn-material-red fa fa-minus-square fa-2x" data-id="{{ survey.id }}" data-action="delete-survey"></button>
+                </div>
+            </a>
     {% endfor %}
     </div>
 {% endblock %}

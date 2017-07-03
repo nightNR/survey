@@ -1,12 +1,21 @@
 {% extends '@NightSurvey/Admin/base.html.twig' %}
 
 {% block panel_title %}
-    {{ surveyAdminListDTO.title|trans }}
+    <span class="title">{{ surveyAdminListDTO.title|trans }}</span>
+    <div class="btn btn-group btn-group-flat tools">
+        <button class="btn btn-material-green fa fa-plus-square fa-2x" aria-hidden="true" data-action="add-form"></button>
+    </div>
 {% endblock %}
 {% block admin_content %}
     <div class="sortable-table">
     {% for form in surveyAdminListDTO.forms %}
-        <a href="{{ path('night_survey_admin_surveyedit', {"surveyId": form.id}) }}" class="list-group-item button" data-id="{{ form.id }}" data-order="{{ form.order }}"><span class="label label-default order">{{ form.order }}</span> {{ form.topic }}</a>
+        <a href="{{ path('night_survey_admin_surveyedit', {"surveyId": form.id}) }}" class="list-group-item button" data-id="{{ form.id }}" data-order="{{ form.order }}">
+            <span class="label label-default order">{{ form.order }}</span> {{ form.topic }}
+            <div class="btn btn-group btn-group-flat tools">
+                <button class="btn btn-material-green fa fa-pencil-square fa-2x" data-id="{{ form.id }}" data-action="edit-form"></button>
+                <button class="btn btn-material-red fa fa-minus-square fa-2x" data-id="{{ form.id }}" data-action="delete-form"></button>
+            </div>
+        </a>
     {% endfor %}
     </div>
 {% endblock %}

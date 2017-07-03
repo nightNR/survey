@@ -59,4 +59,12 @@ abstract class AbstractApiService implements ApiServiceInterface
 
         return $user;
     }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    protected function getRequest()
+    {
+        return $this->container->get('request');
+    }
 }

@@ -9,7 +9,11 @@
 namespace Night\SurveyBundle\Service\ApiCommands;
 
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 interface ApiServiceInterface
 {
     public function getName();
+
+    public function setContainer(ContainerInterface $container = null);
 }

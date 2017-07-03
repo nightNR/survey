@@ -67,5 +67,7 @@ services:
           arguments:
                 - @doctrine.orm.default_entity_manager
                 - @translator
+                - @form.factory
+                - @templating.engine.twig
           tags:
                 - { name: api.service }

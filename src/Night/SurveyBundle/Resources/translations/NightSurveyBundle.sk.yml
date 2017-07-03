@@ -8,3 +8,14 @@ administration:
     messages:
         change_order:
             ok: 'Poradie zmenene'
+        created:
+          survey: 'administration.messages.created.survey'
+        error:
+          survey:
+            not_found: 'administration.messages.error.survey.not_found'
+        success:
+          survey:
+            deleted: 'administration.messages.success.survey.deleted'
+    form:
+      create:
+        survey: 'Vytvorit dotaznik'

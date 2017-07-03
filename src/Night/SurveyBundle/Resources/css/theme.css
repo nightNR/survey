@@ -85,3 +85,14 @@ label.css-label {
     height: 25px;
     display: block;
 }
+
+.tools {
+    margin: -18px -45px;
+    float: right;
+    padding: 7px 30px
+}
+
+.loading {
+    margin: 0 auto;
+    text-align: center;
+}
