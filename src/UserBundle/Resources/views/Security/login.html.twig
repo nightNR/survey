@@ -8,12 +8,12 @@
     <form action="{{ path("fos_user_security_check") }}" method="post" class="form-horizontal">
         <div class="form-group">
             <div class="col-sm-12">
-                <a href="{{ path("hwi_oauth_service_redirect", {service: "facebook"}) }}" class="btn btn-primary btn-block btn-social btn-facebook"><span class="fa fa-facebook"></span>{{ 'security.login.facebook'|trans }}</a>
+                <a href="{{ path("hwi_oauth_service_redirect", {service: "facebook"}) }}" class="btn-block btn-social btn-facebook btn btn-material-indigo"><span class="fa fa-facebook"></span>{{ 'security.login.facebook'|trans }}</a>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-12">
-                <a href="{{ path("hwi_oauth_service_redirect", {service: "google"}) }}" class="btn btn-primary btn-block btn-social btn-google"><span class="fa fa-google"></span>{{ 'security.login.google'|trans }}</a>
+                <a href="{{ path("hwi_oauth_service_redirect", {service: "google"}) }}" class="btn-block btn-social btn-google btn btn-material-red" style="color: rgba(255, 255, 255, 0.84);"><span class="fa fa-google"></span>{{ 'security.login.google'|trans }}</a>
             </div>
         </div>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
@@ -49,7 +49,7 @@
         <div class="form-group">
             <div class="col-sm-12">
                 <input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}"
-                       class="btn btn-primary btn-block"/>
+                       class="btn btn-primary btn-block btn-material-indigo"/>
             </div>
         </div>
     </form>

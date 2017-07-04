@@ -39,7 +39,7 @@
         "hwi/oauth-bundle": "^0.5@stable",
         "ornicar/gravatar-bundle": "^1.1@stable",
         "jms-serializer/serializer-bundle": "^1.1@stable",
-        "components/font-awesome": "^4.7@stable"
+        "bmatzner/fontawesome-bundle": "~4.7"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

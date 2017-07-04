@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
             new \JMS\SerializerBundle\JMSSerializerBundle(),
+            new Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle(),
 
             new Night\SurveyBundle\NightSurveyBundle(),
             new UserBundle\UserBundle(),
