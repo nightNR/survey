@@ -8,6 +8,7 @@
 
 namespace Night\SurveyBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,11 +19,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Question
 {
-
     /**
      * @var string
      * @ORM\Id()
-     * @ORM\Column(name="id", type="guid")
+     * @ORM\Column(type="guid")
      * @ORM\GeneratedValue(strategy="UUID")
      */
     private $id;
@@ -41,7 +41,7 @@ class Question
 
     /**
      * @var string
-     * @ORM\Column(name="group", type="string")
+     * @ORM\Column(name="`group`", type="string")
      */
     private $group;
 
@@ -52,14 +52,14 @@ class Question
     private $inputType;
 
     /**
-     * @var string
-     * @ORM\OneToMany(targetEntity="Night\SurveyBundle\Entity\UniversalEnum", mappedBy="question")
+     * @var UniversalEnum[]
+     * @ORM\OneToMany(targetEntity="Night\SurveyBundle\Entity\UniversalEnum", mappedBy="question", cascade={"persist"})
      */
     private $inputEnums;
 
     /**
      * @var Image
-     * @ORM\OneToOne(targetEntity="Night\SurveyBundle\Entity\Image", mappedBy="question")
+     * @ORM\OneToOne(targetEntity="Night\SurveyBundle\Entity\Image", mappedBy="question", cascade={"persist"})
      */
     private $image;
 
@@ -71,8 +71,7 @@ class Question
 
     /**
      * @var int
-     * @ORM\Column(type="integer", nullable=false, options={"unsigned": true})
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="`order`", type="integer", nullable=false, options={"unsigned": true})
      */
     private $order;
 
@@ -87,7 +86,7 @@ class Question
      */
     public function __construct()
     {
-        $this->inputEnums = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->inputEnums = new ArrayCollection();
     }
 
     /**
@@ -188,12 +187,15 @@ class Question
     /**
      * Add inputEnums
      *
-     * @param \Night\SurveyBundle\Entity\UniversalEnum $inputEnums
+     * @param \Night\SurveyBundle\Entity\UniversalEnum $inputEnum
      * @return Question
      */
-    public function addInputEnum(\Night\SurveyBundle\Entity\UniversalEnum $inputEnums)
+    public function addInputEnum(\Night\SurveyBundle\Entity\UniversalEnum $inputEnum)
     {
-        $this->inputEnums[] = $inputEnums;
+        $this->inputEnums[] = $inputEnum;
+        if($inputEnum->getQuestion() !== $this) {
+            $inputEnum->setQuestion($this);
+        }
 
         return $this;
     }
@@ -232,6 +234,9 @@ class Question
     public function setImage(Image $image)
     {
         $this->image = $image;
+        if($image->getQuestion() !== $this) {
+            $image->setQuestion($this);
+        }
     }
 
 
@@ -281,5 +286,24 @@ class Question
     public function setRightAnswer($rightAnswer)
     {
         $this->rightAnswer = $rightAnswer;
+    }
+
+    public function createCopy()
+    {
+        $copy = new self();
+        $copy->setQuestionText($this->getQuestionText());
+        $copy->setGroup($this->getGroup());
+        $copy->setInputType($this->getInputType());
+        $copy->setIsRequired($this->isIsRequired());
+        $copy->setOrder($this->getOrder());
+        $copy->setRightAnswer($this->getRightAnswer());
+        if($this->getImage() !== null) {
+            $copy->setImage($this->getImage()->createCopy());
+        }
+        /** @var UniversalEnum $inputEnum */
+        foreach($this->inputEnums as $inputEnum) {
+            $copy->addInputEnum($inputEnum->createCopy());
+        }
+        return $copy;
     }
 }

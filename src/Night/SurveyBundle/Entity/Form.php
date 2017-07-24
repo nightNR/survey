@@ -8,11 +8,12 @@
 
 namespace Night\SurveyBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Form
- * @package Night\SurveyBundle\Entity\Traits
+ * @package Night\SurveyBundle\Entity
  * @ORM\Entity()
  * @ORM\Table(name="forms")
  */
@@ -51,8 +52,8 @@ class Form
     private $topText;
 
     /**
-     * @var Question
-     * @ORM\OneToMany(targetEntity="Night\SurveyBundle\Entity\Question", mappedBy="form")
+     * @var Question[]
+     * @ORM\OneToMany(targetEntity="Night\SurveyBundle\Entity\Question", mappedBy="form", cascade={"persist"})
      * @ORM\OrderBy({"order": "ASC"})
      */
     private $questions;
@@ -162,13 +163,15 @@ class Form
     /**
      * Add questions
      *
-     * @param \Night\SurveyBundle\Entity\Question $questions
+     * @param \Night\SurveyBundle\Entity\Question $question
      * @return Form
      */
-    public function addQuestion(\Night\SurveyBundle\Entity\Question $questions)
+    public function addQuestion(\Night\SurveyBundle\Entity\Question $question)
     {
-        $this->questions[] = $questions;
-
+        $this->questions[] = $question;
+        if($question->getForm() !== $this) {
+            $question->setForm($this);
+        }
         return $this;
     }
 
@@ -206,5 +209,19 @@ class Form
     public function setIsScs($isScs)
     {
         $this->isScs = $isScs;
+    }
+
+    public function createCopy()
+    {
+        $copy = new self();
+        $copy->setOrder($this->getOrder());
+        $copy->setTopic($this->getTopic());
+        $copy->setTopText($this->getTopText());
+        $copy->setIsScs($this->isIsScs());
+        /** @var Question $question */
+        foreach($this->questions as $question) {
+            $copy->addQuestion($question->createCopy());
+        }
+        return $copy;
     }
 }

@@ -84,4 +84,12 @@ class Image
     {
         $this->alt = $alt;
     }
+
+    public function createCopy()
+    {
+        $copy = new self();
+        $copy->setPath($this->getPath());
+        $copy->setAlt($this->getAlt());
+        return $copy;
+    }
 }

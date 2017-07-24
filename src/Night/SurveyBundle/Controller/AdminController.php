@@ -13,6 +13,7 @@ use Night\SurveyBundle\Entity\Survey;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use UserBundle\Entity\User;
 
 class AdminController extends Controller
@@ -61,5 +62,23 @@ class AdminController extends Controller
                 'survey_id' => $surveyId
             ]
         ]);
+    }
+
+    /**
+     * @param $surveyId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \InvalidArgumentException
+     * @Route("admin/survey/clone/{surveyId}")
+     */
+    public function cloneSurvey($surveyId)
+    {
+        /** @var EntityManagerInterface $em */
+        $em = $this->get('doctrine.orm.entity_manager');
+        $survey = $em->getRepository(Survey::class)->find($surveyId);
+        $surveyCopy = $survey->createCopy();
+        $em->persist($surveyCopy);
+        $em->flush();
+        return new Response($surveyCopy->getId());
     }
 }

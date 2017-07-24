@@ -122,4 +122,12 @@ class UniversalEnum
     {
         return $this->question;
     }
+
+    public function createCopy()
+    {
+        $copy = new self();
+        $copy->setValue($this->getValue());
+        $copy->setLabel($this->getLabel());
+        return $copy;
+    }
 }

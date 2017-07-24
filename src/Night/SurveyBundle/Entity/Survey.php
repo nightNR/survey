@@ -38,7 +38,7 @@ class Survey
 
     /**
      * @var ArrayCollection<Form>
-     * @ORM\OneToMany(targetEntity="Form", mappedBy="survey")
+     * @ORM\OneToMany(targetEntity="Form", mappedBy="survey", cascade={"persist"})
      * @ORM\OrderBy(value={"order": "ASC"})
      */
     private $forms;
@@ -106,13 +106,15 @@ class Survey
     /**
      * Add forms
      *
-     * @param \Night\SurveyBundle\Entity\Form $forms
+     * @param \Night\SurveyBundle\Entity\Form $form
      * @return Survey
      */
-    public function addForm(\Night\SurveyBundle\Entity\Form $forms)
+    public function addForm(\Night\SurveyBundle\Entity\Form $form)
     {
-        $this->forms[] = $forms;
-
+        $this->forms[] = $form;
+        if($form->getSurvey() !== $this) {
+            $form->setSurvey($this);
+        }
         return $this;
     }
 
@@ -191,5 +193,20 @@ class Survey
             }
         }
         return $max;
+    }
+
+    /**
+     * @return Survey
+     */
+    public function createCopy()
+    {
+        $copy = new self();
+        $copy->setTitle($this->title);
+        $copy->setOwner($this->getOwner());
+        /** @var Form $form */
+        foreach($this->forms as $form) {
+            $copy->addForm($form->createCopy());
+        }
+        return $copy;
     }
 }
