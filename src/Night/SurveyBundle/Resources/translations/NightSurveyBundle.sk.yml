@@ -13,9 +13,13 @@ administration:
         error:
           survey:
             not_found: 'administration.messages.error.survey.not_found'
+          form:
+            not_found: 'administration.messages.error.form.not_found'
         success:
           survey:
             deleted: 'administration.messages.success.survey.deleted'
+          form:
+            deleted: 'administration.messages.success.form.deleted'
     form:
       create:
         survey: 'Vytvorit dotaznik'

@@ -96,3 +96,7 @@ label.css-label {
     margin: 0 auto;
     text-align: center;
 }
+
+.btn {
+    height: 42px;
+}

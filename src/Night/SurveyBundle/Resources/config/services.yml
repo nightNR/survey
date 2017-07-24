@@ -71,3 +71,25 @@ services:
                 - @templating.engine.twig
           tags:
                 - { name: api.service }
+
+  api_form:
+            class: Night\SurveyBundle\Service\ApiCommands\Form
+            arguments:
+                  - @doctrine.orm.default_entity_manager
+                  - @translator
+                  - @form.factory
+                  - @templating.engine.twig
+            tags:
+                  - { name: api.service }
+
+  night_survey.transformer.survey:
+            class: Night\SurveyBundle\Form\Admin\Transformer\SurveyTransformer
+            arguments:
+                - @doctrine.orm.default_entity_manager
+
+  night_survey.form.type.form:
+            class: Night\SurveyBundle\Form\Admin\FormType
+            arguments:
+                - @night_survey.transformer.survey
+            tags:
+                - { name: form.type }

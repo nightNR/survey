@@ -180,4 +180,16 @@ class Survey
             $user->addSurvey($this);
         }
     }
+
+    public function getMaxOrderNumber()
+    {
+        $max = 0;
+        /** @var Form $form */
+        foreach($this->forms as $form) {
+            if($form->getOrder() > $max) {
+                $max = $form->getOrder();
+            }
+        }
+        return $max;
+    }
 }

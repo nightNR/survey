@@ -11,7 +11,8 @@ if(!window.Survey) {
         },
 
         globalState: {
-            'edited_survey': null
+            'edited_survey': null,
+            'edited_form': null
         },
 
         form: {
@@ -55,7 +56,7 @@ if(!window.Survey) {
                         mutation.addedNodes.forEach(function(message) {
                             setTimeout(function () {
                                 $(message).fadeOut(200, function(e) {
-                                    $(e).remove();
+                                    $(this).remove();
                                 });
                             }, 2000)
                         });
@@ -64,16 +65,7 @@ if(!window.Survey) {
                 });
                 var config = {childList: true};
 
-                // pass in the target node, as well as the observer options
                 observer.observe(messageContainer, config);
-                // $('#flash-messages').on('change', function(e){
-                //     console.log(e);
-                //     $(this).find('.alert').each(function() {
-                //         setTimeout(function(){
-                //             $(this).remove();
-                //         }, 2000)
-                //     })
-                // })
             }
         },
 
@@ -82,14 +74,10 @@ if(!window.Survey) {
                 sort: function (event, element) {
                     try {
                         var count = 1;
-                        // console.log(event);
-                        // console.log($(element.item).parent());
-                        // console.log($("a.list-group.button"));
                         var dataToCall = {
                             'items': []
                         };
                         $(element.item).parent().find("a").each(function(){
-                            console.log();
                             $(this).attr("data-order", count);
                             $(this).find(".order").text(count);
                             dataToCall.items.push({
@@ -138,7 +126,6 @@ if(!window.Survey) {
                         }
                     }
                 }
-                Survey.flashMessages.addFlashMessage(data.status, data.message);
             },
             tools: {
                 init: function () {
@@ -155,8 +142,6 @@ if(!window.Survey) {
                         case 'add-survey':
                             $('#admin-modal').modal('show');
                             Survey.admin.makeApiCall('survey', 'createOrEditSurvey', {}, Survey.admin.handleResponse);
-                            console.log('add');
-                            console.log(element);
                             break;
                         case 'edit-survey':
                             Survey.globalState.edited_survey = $(element).data('id');
@@ -164,12 +149,28 @@ if(!window.Survey) {
                             Survey.admin.makeApiCall('survey', 'createOrEditSurvey', {'data': {
                                 'survey_id': $(element).data('id')
                             }}, Survey.admin.handleResponse);
-                            console.log('edit');
-                            console.log(element);
                             break;
                         case 'delete-survey':
                             Survey.admin.makeApiCall('survey', 'removeSurvey', {'data': {
                                 'survey_id': $(element).data('id')
+                            }}, Survey.admin.handleResponse);
+                            break;
+                        case 'add-form':
+                            $('#admin-modal').modal('show');
+                            Survey.admin.makeApiCall('form', 'createOrEditForm', {'data': {
+                                'survey_id': $(element).data('survey_id')
+                            }}, Survey.admin.handleResponse);
+                            break;
+                        case 'edit-form':
+                            Survey.globalState.edited_form = $(element).data('id');
+                            $('#admin-modal').modal('show');
+                            Survey.admin.makeApiCall('form', 'createOrEditForm', {'data': {
+                                'form_id': $(element).data('id')
+                            }}, Survey.admin.handleResponse);
+                            break;
+                        case 'delete-form':
+                            Survey.admin.makeApiCall('form', 'removeForm', {'data': {
+                                'form_id': $(element).data('id')
                             }}, Survey.admin.handleResponse);
                             break;
                     }
@@ -199,6 +200,10 @@ if(!window.Survey) {
                                 service = 'survey';
                                 action = 'createOrEditSurvey';
                                 break;
+                            case 'form':
+                                service = 'form';
+                                action = 'createOrEditForm';
+                                break;
                         }
                         Survey.admin.tools.form.makeApiCall(service, action, formData, Survey.admin.handleResponse)
                     },
@@ -213,8 +218,12 @@ if(!window.Survey) {
                             'value': service
                         });
                         dataObject.push({
-                            'name': 'data[survey_id][survey_id]',
+                            'name': 'data[data][survey_id]',
                             'value': Survey.globalState.edited_survey
+                        });
+                        dataObject.push({
+                            'name': 'data[data][form_id]',
+                            'value': Survey.globalState.edited_form
                         });
                         console.log(data);
                         $.ajax({

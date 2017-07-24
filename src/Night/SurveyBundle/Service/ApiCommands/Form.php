@@ -1,21 +1,19 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: nightnr
- * Date: 02.07.17
- * Time: 22:42
+ * User: pbalaz
+ * Date: 7/4/17
+ * Time: 5:31 PM
  */
 
 namespace Night\SurveyBundle\Service\ApiCommands;
 
-
-use Night\SurveyBundle\Entity\Form;
-use Night\SurveyBundle\Form\Admin\SurveyType;
+use Night\SurveyBundle\Form\Admin\FormType;
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class Survey extends AbstractApiService
+class Form extends AbstractApiService
 {
     /**
      * @var TranslatorInterface
@@ -42,62 +40,50 @@ class Survey extends AbstractApiService
 
     public function getName()
     {
-        return 'survey';
+        return 'form';
     }
 
-    public function reorderForms($data)
+    public function removeForm($data)
     {
-        foreach($data as $form) {
-            $formEntity = $this->em->getRepository(Form::class)->findOneBy([
-                'id' => $form['id']
-            ]);
-            $formEntity->setOrder($form['order']);
-            $this->em->persist($formEntity);
-        }
-        $this->em->flush();
-        return [
-            'flashMessage' => [
-                'status' => 'OK',
-                'message' => $this->translator->trans('administration.messages.change_order.ok', [], 'NightSurveyBundle')
-            ]
-        ];
-    }
-
-    public function removeSurvey($data)
-    {
-        if($data === null || !array_key_exists('survey_id', $data)) {
+        if($data === null || !array_key_exists('form_id', $data)) {
             return [
                 'flashMessage' => [
                     'status' => 'error',
-                    'message' => $this->translator->trans('administration.messages.error.survey.not_found', [], 'NightSurveyBundle')
+                    'message' => $this->translator->trans('administration.messages.error.form.not_found', [], 'NightSurveyBundle')
                 ]
             ];
         }
-        $survey = $this->em->find(\Night\SurveyBundle\Entity\Survey::class, $data['survey_id']);
+        $survey = $this->em->find(\Night\SurveyBundle\Entity\Form::class, $data['form_id']);
         $this->em->remove($survey);
         $this->em->flush();
         return [
             'flashMessage' => [
                 'status' => 'OK',
-                'message' => $this->translator->trans('administration.messages.success.survey.deleted', [], 'NightSurveyBundle')
+                'message' => $this->translator->trans('administration.messages.success.form.deleted', [], 'NightSurveyBundle')
             ],
             'reload' => 0
         ];
     }
 
-    public function createOrEditSurvey($data = null)
+    public function createOrEditForm($data = null)
     {
-        $survey = new \Night\SurveyBundle\Entity\Survey();
+        $formEntity = new \Night\SurveyBundle\Entity\Form();
         $title = 'administration.form.create.survey';
         if($data !== null && array_key_exists('survey_id', $data) && $data['survey_id'] != null ) {
             $survey = $this->em->find(\Night\SurveyBundle\Entity\Survey::class, $data['survey_id']);
-            $title = 'administration.form.edit.survey';
+            $formEntity->setSurvey($survey);
         }
-        $form = $this->formFactory->create(SurveyType::class, $survey);
+        if($data !== null && array_key_exists('form_id', $data) && $data['form_id'] != null ) {
+            $formEntity = $this->em->find(\Night\SurveyBundle\Entity\Form::class, $data['form_id']);
+            $title = 'administration.form.edit.form';
+        }
+        $form = $this->formFactory->create(FormType::class, $formEntity);
         $form->handleRequest($this->getRequest());
         if($form->isSubmitted() && $form->isValid()) {
-            $survey->setOwner($this->getUser());
-            $this->em->persist($survey);
+            if(!$formEntity->getOrder()) {
+                $formEntity->setOrder($formEntity->getSurvey()->getMaxOrderNumber()+1);
+            }
+            $this->em->persist($formEntity);
             $this->em->flush();
             return [
                 'flashMessage' => [

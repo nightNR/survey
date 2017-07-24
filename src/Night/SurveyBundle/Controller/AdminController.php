@@ -50,8 +50,8 @@ class AdminController extends Controller
         /** @var EntityManagerInterface $em */
         $em = $this->get('doctrine.orm.entity_manager');
         $survey = $em->getRepository(Survey::class)->find($surveyId);
-        $forms = $survey->getForms();
-        $formSlice = $forms->slice(max($page - 1, 0) * self::ENTRIES_PER_PAGE, self::ENTRIES_PER_PAGE);
+        $formSlice = $forms = $survey->getForms();
+//        $formSlice = $forms->slice(max($page - 1, 0) * self::ENTRIES_PER_PAGE, self::ENTRIES_PER_PAGE);
         return $this->render('@NightSurvey/Admin/survey_edit.html.twig', [
             'surveyAdminListDTO' => [
                 'title' => $survey->getTitle(),

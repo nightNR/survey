@@ -2,58 +2,60 @@
 
 {% block panel_title %}
     <span class="title">{{ surveyAdminListDTO.title|trans }}</span>
-    <div class="btn btn-group btn-group-flat tools">
-        <button class="btn btn-material-green fa fa-plus-square fa-2x" aria-hidden="true" data-action="add-form"></button>
+    <div class="btn-group btn-group-flat tools">
+        <button class="btn btn-material-green fa fa-plus-square fa-lg fa-inverse" aria-hidden="true" data-action="add-form" data-survey_id="{{ surveyAdminListDTO.survey_id }}"></button>
     </div>
 {% endblock %}
+
 {% block admin_content %}
     <div class="sortable-table">
     {% for form in surveyAdminListDTO.forms %}
         <a href="{{ path('night_survey_admin_surveyedit', {"surveyId": form.id}) }}" class="list-group-item button" data-id="{{ form.id }}" data-order="{{ form.order }}">
             <span class="label label-default order">{{ form.order }}</span> {{ form.topic }}
-            <div class="btn btn-group btn-group-flat tools">
-                <button class="btn btn-material-green fa fa-pencil-square fa-2x" data-id="{{ form.id }}" data-action="edit-form"></button>
-                <button class="btn btn-material-red fa fa-minus-square fa-2x" data-id="{{ form.id }}" data-action="delete-form"></button>
+            <div class="btn-group btn-group-flat tools">
+                <button class="btn btn-material-green fa fa-pencil-square fa-lg fa-inverse" data-id="{{ form.id }}" data-action="edit-form"></button>
+                <button class="btn btn-material-red fa fa-minus-square fa-lg fa-inverse" data-id="{{ form.id }}" data-action="delete-form"></button>
             </div>
         </a>
     {% endfor %}
     </div>
 {% endblock %}
-{% block footer_nav %}
-    <ul class="pagination">
-        <li {% if surveyAdminListDTO.page == 1 %}class="disabled"{% endif %}>
-            <a href="
-                        {% if surveyAdminListDTO.page == 1 %}
-                        #
-                        {% else %}
-                        {{ path('night_survey_admin_surveyedit', {"page": surveyAdminListDTO.page-1, "surveyId": surveyAdminListDTO.survey_id}) }}
-                        {% endif %}
-                " aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-        {% set min_page = max(1, surveyAdminListDTO.page - 2) %}
-        {% set max_page = min(surveyAdminListDTO.page + 2, surveyAdminListDTO.page_count) %}
-        {% for page in min_page..max_page %}
-            <li {% if page == surveyAdminListDTO.page %} class="active"{% endif %}><a href="
-                        {% if page == surveyAdminListDTO.page %}
-                            #
-                        {% else %}
-                            {{ path('night_survey_admin_surveyedit', {"page": page, "surveyId": surveyAdminListDTO.survey_id}) }}
-                        {% endif %}
-                    ">{{ page }}</a></li>
-        {% endfor %}
 
-        <li {% if surveyAdminListDTO.page == surveyAdminListDTO.page_count %}class="disabled"{% endif %}>
-            <a href="
-                        {% if surveyAdminListDTO.page == surveyAdminListDTO.page_count %}
-                        #
-                        {% else %}
-                        {{ path('night_survey_admin_surveyedit', {"page": surveyAdminListDTO.page+1, "surveyId": surveyAdminListDTO.survey_id}) }}
-                        {% endif %}
-                    " aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-    </ul>
+{% block footer_nav %}
+    {#<ul class="pagination">#}
+        {#<li {% if surveyAdminListDTO.page == 1 %}class="disabled"{% endif %}>#}
+            {#<a href="#}
+                        {#{% if surveyAdminListDTO.page == 1 %}#}
+                        {###}
+                        {#{% else %}#}
+                        {#{{ path('night_survey_admin_surveyedit', {"page": surveyAdminListDTO.page-1, "surveyId": surveyAdminListDTO.survey_id}) }}#}
+                        {#{% endif %}#}
+                {#" aria-label="Previous">#}
+                {#<span aria-hidden="true">&laquo;</span>#}
+            {#</a>#}
+        {#</li>#}
+        {#{% set min_page = max(1, surveyAdminListDTO.page - 2) %}#}
+        {#{% set max_page = min(surveyAdminListDTO.page + 2, surveyAdminListDTO.page_count) %}#}
+        {#{% for page in min_page..max_page %}#}
+            {#<li {% if page == surveyAdminListDTO.page %} class="active"{% endif %}><a href="#}
+                        {#{% if page == surveyAdminListDTO.page %}#}
+                            {###}
+                        {#{% else %}#}
+                            {#{{ path('night_survey_admin_surveyedit', {"page": page, "surveyId": surveyAdminListDTO.survey_id}) }}#}
+                        {#{% endif %}#}
+                    {#">{{ page }}</a></li>#}
+        {#{% endfor %}#}
+
+        {#<li {% if surveyAdminListDTO.page == surveyAdminListDTO.page_count %}class="disabled"{% endif %}>#}
+            {#<a href="#}
+                        {#{% if surveyAdminListDTO.page == surveyAdminListDTO.page_count %}#}
+                        {###}
+                        {#{% else %}#}
+                        {#{{ path('night_survey_admin_surveyedit', {"page": surveyAdminListDTO.page+1, "surveyId": surveyAdminListDTO.survey_id}) }}#}
+                        {#{% endif %}#}
+                    {#" aria-label="Next">#}
+                {#<span aria-hidden="true">&raquo;</span>#}
+            {#</a>#}
+        {#</li>#}
+    {#</ul>#}
 {% endblock %}

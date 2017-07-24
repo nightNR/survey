@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Night\SurveyBundle\Entity\Survey;
 
 class SurveyType extends AbstractType
 {
@@ -31,11 +32,13 @@ class SurveyType extends AbstractType
 
     /**
      * @param OptionsResolver $resolver
+     *
+     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Night\SurveyBundle\Entity\Survey'
+            'data_class' => Survey::class
         ));
     }
 }
