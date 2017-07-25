@@ -54,6 +54,12 @@ class Survey
     private $resultTargetQuestion;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $resultText;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -158,5 +164,21 @@ class Survey
     public function setResultTargetQuestion($resultTargetQuestion)
     {
         $this->resultTargetQuestion = $resultTargetQuestion;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResultText()
+    {
+        return $this->resultText;
+    }
+
+    /**
+     * @param string $resultText
+     */
+    public function setResultText($resultText)
+    {
+        $this->resultText = $resultText;
     }
 }
