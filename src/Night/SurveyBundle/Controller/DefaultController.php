@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DefaultController extends Controller
@@ -105,19 +106,46 @@ class DefaultController extends Controller
         $surveyService = $this->container->get("night_survey.survey");
         $output = $surveyService->getResultAsCsv($surveyId);
 
-        $response = new StreamedResponse();
-        $response->setCallback(function () use ($output) {
-            $handle = fopen('php://output', 'w+');
-            fwrite($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
+        $phpExcel = $this->get('phpexcel');
 
-            foreach ($output as $row) {
-                fputcsv($handle, $row, ';');
+        $excelObject = $phpExcel->createPHPExcelObject();
+        $excelObject->getProperties()
+            ->setCreator('Survey')
+            ->setCreated()
+            ->setTitle('Export for survey ' . $surveyId);
+        $activeSheet = $excelObject->setActiveSheetIndex(0);
+        $activeSheet->setTitle('Exported data');
+        if(array_key_exists('name', $output)) {
+            $questions = $output['name'];
+            $row = 1;
+            unset($output['name']);
+            $columnNameMap = [];
+            $column = 0;
+            foreach($questions as $id => $question) {
+                $activeSheet->setCellValueByColumnAndRow($column, $row, $question);
+                $columnNameMap[$id] = $column;
+                $column++;
             }
-            fclose($handle);
-        });
-        $response->setStatusCode(200);
-        $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
-        $response->headers->set('Content-Disposition', 'attachment; filename="export-'.$surveyId.'.csv"');
+            $row++;
+            foreach($output as $submittedData) {
+                foreach($submittedData as $questionId => $answer) {
+                    $activeSheet->setCellValueByColumnAndRow($columnNameMap[$questionId], $row, $answer);
+                }
+                $row++;
+            }
+        }
+
+        $writer = $phpExcel->createWriter($excelObject, 'Excel5');
+        $response = $phpExcel->createStreamedResponse($writer);
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $surveyId.'.xls'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+
         return $response;
     }
 

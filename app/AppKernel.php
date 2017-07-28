@@ -19,6 +19,7 @@ class AppKernel extends Kernel
 
             new \Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new \Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
+            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
 
             new Night\SurveyBundle\NightSurveyBundle(),
         );
