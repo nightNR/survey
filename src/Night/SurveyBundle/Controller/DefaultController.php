@@ -95,7 +95,9 @@ class DefaultController extends Controller
     /**
      * @param $surveyId
      * @Route("export/{surveyId}", name="export", )
+     *
      * @return StreamedResponse
+     * @throws \LogicException
      */
     public function exportAction($surveyId)
     {
@@ -106,6 +108,7 @@ class DefaultController extends Controller
         $response = new StreamedResponse();
         $response->setCallback(function () use ($output) {
             $handle = fopen('php://output', 'w+');
+            fwrite($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
             foreach ($output as $row) {
                 fputcsv($handle, $row, ';');
@@ -114,7 +117,7 @@ class DefaultController extends Controller
         });
         $response->setStatusCode(200);
         $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
-        $response->headers->set('Content-Disposition', 'attachment; filename="export.csv"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="export-'.$surveyId.'.csv"');
         return $response;
     }
 
