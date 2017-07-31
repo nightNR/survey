@@ -94,7 +94,17 @@ class Survey
 
         $formView = $this->generateForm($currentForm);
 
-        return new SurveyDTO($surveyId, $currentForm->getId(), $survey->getTitle(), $currentForm->getTopic(), (int)$page, $survey->getForms()->count(), $currentForm->getTopText(), $formView);
+        return new SurveyDTO(
+            $surveyId,
+            $currentForm->getId(),
+            $survey->getTitle(),
+            $currentForm->getTopic(),
+            (int)$page,
+            $survey->getForms()->count(),
+            $currentForm->getTopText(),
+            $formView,
+            $survey->getResultText()
+        );
     }
 
     public function save($surveyId)

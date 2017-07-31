@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
             new \JMS\SerializerBundle\JMSSerializerBundle(),
             new Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle(),
+            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
 
             new Night\SurveyBundle\NightSurveyBundle(),
             new UserBundle\UserBundle(),

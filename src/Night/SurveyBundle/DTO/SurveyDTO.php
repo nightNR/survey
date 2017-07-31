@@ -55,18 +55,34 @@ class SurveyDTO
     private $form;
 
     /**
-     * SurveyDTO constructor.
-     * @param $surveyId
-     * @param $formId
-     * @param string $title
-     * @param string $subTitle
-     * @param int $currentPage
-     * @param int $maxPage
-     * @param string $formText
-     * @param FormInterface $form
+     * @var string
      */
-    public function __construct($surveyId, $formId, $title, $subTitle, $currentPage, $maxPage, $formText, FormInterface $form = null)
-    {
+    private $resultText;
+
+    /**
+     * SurveyDTO constructor.
+     *
+     * @param               $surveyId
+     * @param               $formId
+     * @param string        $title
+     * @param string        $subTitle
+     * @param int           $currentPage
+     * @param int           $maxPage
+     * @param string        $formText
+     * @param FormInterface $form
+     * @param               $resultText
+     */
+    public function __construct(
+        $surveyId,
+        $formId,
+        $title,
+        $subTitle,
+        $currentPage,
+        $maxPage,
+        $formText,
+        FormInterface $form = null,
+        $resultText
+    ) {
         $this->surveyId = $surveyId;
         $this->formId = $formId;
         $this->title = $title;
@@ -75,6 +91,7 @@ class SurveyDTO
         $this->maxPage = $maxPage;
         $this->formText = $formText;
         $this->form = $form;
+        $this->resultText = $resultText;
     }
 
     /**
@@ -149,5 +166,13 @@ class SurveyDTO
     public function getProgress()
     {
         return floor(($this->currentPage/$this->maxPage)*100);
+    }
+
+    /**
+     * @return string
+     */
+    public function getResultText()
+    {
+        return $this->resultText;
     }
 }
