@@ -108,6 +108,7 @@ class DefaultController extends Controller
 
         $phpExcel = $this->get('phpexcel');
 
+        /** @var \PHPExcel $excelObject */
         $excelObject = $phpExcel->createPHPExcelObject();
         $excelObject->getProperties()
             ->setCreator('Survey')
@@ -135,7 +136,8 @@ class DefaultController extends Controller
             }
         }
 
-        $writer = $phpExcel->createWriter($excelObject, 'Excel5');
+        /** @var \PHPExcel_Writer_Excel5 $writer */
+        $writer = $phpExcel->createWriter($excelObject, 'Excel2007');
         $response = $phpExcel->createStreamedResponse($writer);
         $dispositionHeader = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
