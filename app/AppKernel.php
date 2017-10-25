@@ -26,9 +26,9 @@ class AppKernel extends Kernel
             new Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
 
-            new Night\SurveyBundle\NightSurveyBundle(),
-            new UserBundle\UserBundle(),
             new Night\HwiOAuthExtendBundle\HwiOAuthExtendBundle(),
+            new Night\SurveyBundle\NightSurveyBundle(),
+            new UserBundle\UserBundle(),            
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
